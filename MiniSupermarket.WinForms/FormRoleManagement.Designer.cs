@@ -47,6 +47,7 @@
             dgvRoles.Size = new Size(500, 300);
             dgvRoles.TabIndex = 2;
             dgvRoles.CellClick += dgvRoles_CellClick;
+            dgvRoles.CellContentClick += dgvRoles_CellContentClick;
             // 
             // txtId
             // 

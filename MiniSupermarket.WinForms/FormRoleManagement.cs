@@ -7,7 +7,7 @@ namespace MiniSupermarket.WinForms
     {
         private static readonly HttpClient _client = new HttpClient
         {
-            BaseAddress = new Uri("https://localhost:7123/api/")
+            BaseAddress = new Uri("https://localhost:7046/api/")
         };
 
         public FormRoleManagement()
@@ -138,6 +138,11 @@ namespace MiniSupermarket.WinForms
         }
 
         private void txtId_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dgvRoles_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
