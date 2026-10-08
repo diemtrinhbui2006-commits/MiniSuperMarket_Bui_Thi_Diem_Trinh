@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MiniSupermarket.API.Data;
 
@@ -10,9 +11,11 @@ using MiniSupermarket.API.Data;
 namespace MiniSupermarket.API.Migrations
 {
     [DbContext(typeof(SupermarketDbContext))]
-    partial class SupermarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261008122045_AddCustomersTable")]
+    partial class AddCustomersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -369,143 +372,6 @@ namespace MiniSupermarket.API.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            ProductId = 1,
-                            Barcode = "8934567890001",
-                            CategoryId = 1,
-                            Price = 125000m,
-                            ProductName = "Bánh quy bơ Danisa 454g",
-                            StockQuantity = 50
-                        },
-                        new
-                        {
-                            ProductId = 2,
-                            Barcode = "8934567890002",
-                            CategoryId = 2,
-                            Price = 10000m,
-                            ProductName = "Nước ngọt Coca Cola lon 330ml",
-                            StockQuantity = 120
-                        },
-                        new
-                        {
-                            ProductId = 3,
-                            Barcode = "8934567890003",
-                            CategoryId = 3,
-                            Price = 7500m,
-                            ProductName = "Sữa tươi Vinamilk 180ml",
-                            StockQuantity = 200
-                        },
-                        new
-                        {
-                            ProductId = 4,
-                            Barcode = "8934567890004",
-                            CategoryId = 4,
-                            Price = 4500m,
-                            ProductName = "Mì Hảo Hảo tôm chua cay 75g",
-                            StockQuantity = 300
-                        },
-                        new
-                        {
-                            ProductId = 5,
-                            Barcode = "8934567890005",
-                            CategoryId = 5,
-                            Price = 32000m,
-                            ProductName = "Nước mắm Nam Ngư 500ml",
-                            StockQuantity = 80
-                        },
-                        new
-                        {
-                            ProductId = 6,
-                            Barcode = "8934567890006",
-                            CategoryId = 6,
-                            Price = 145000m,
-                            ProductName = "Gạo ST25 túi 5kg",
-                            StockQuantity = 40
-                        },
-                        new
-                        {
-                            ProductId = 7,
-                            Barcode = "8934567890007",
-                            CategoryId = 7,
-                            Price = 28000m,
-                            ProductName = "Cá hộp ba cô gái 155g",
-                            StockQuantity = 60
-                        },
-                        new
-                        {
-                            ProductId = 8,
-                            Barcode = "8934567890008",
-                            CategoryId = 8,
-                            Price = 65000m,
-                            ProductName = "Cà phê hòa tan Trung Nguyên 3in1",
-                            StockQuantity = 70
-                        },
-                        new
-                        {
-                            ProductId = 9,
-                            Barcode = "8934567890009",
-                            CategoryId = 9,
-                            Price = 18000m,
-                            ProductName = "Tương ớt Chinsu 250g",
-                            StockQuantity = 90
-                        },
-                        new
-                        {
-                            ProductId = 10,
-                            Barcode = "8934567890010",
-                            CategoryId = 10,
-                            Price = 32000m,
-                            ProductName = "Nước rửa chén Sunlight 750ml",
-                            StockQuantity = 75
-                        },
-                        new
-                        {
-                            ProductId = 11,
-                            Barcode = "8934567890011",
-                            CategoryId = 11,
-                            Price = 115000m,
-                            ProductName = "Dầu gội Clear 650g",
-                            StockQuantity = 45
-                        },
-                        new
-                        {
-                            ProductId = 12,
-                            Barcode = "8934567890012",
-                            CategoryId = 12,
-                            Price = 28000m,
-                            ProductName = "Khăn giấy Pulppy 3 lớp",
-                            StockQuantity = 100
-                        },
-                        new
-                        {
-                            ProductId = 13,
-                            Barcode = "8934567890013",
-                            CategoryId = 13,
-                            Price = 5000m,
-                            ProductName = "Bút bi Thiên Long TL-027",
-                            StockQuantity = 150
-                        },
-                        new
-                        {
-                            ProductId = 14,
-                            Barcode = "8934567890014",
-                            CategoryId = 14,
-                            Price = 42000m,
-                            ProductName = "Xúc xích CP gói 200g",
-                            StockQuantity = 65
-                        },
-                        new
-                        {
-                            ProductId = 15,
-                            Barcode = "8934567890015",
-                            CategoryId = 15,
-                            Price = 68000m,
-                            ProductName = "Bánh ăn dặm Gerber cho bé",
-                            StockQuantity = 35
-                        });
                 });
 
             modelBuilder.Entity("MiniSupermarket.API.Models.Product", b =>
