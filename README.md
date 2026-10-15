@@ -327,3 +327,62 @@ CRUD + Search
 Họ tên: Bùi Thị Diễm Trinh
 Mã sinh viên: 2124110287
 Lớp học phần: CCQ2411D
+
+---
+
+# 🚀 BUỔI 5: ADO.NET NÂNG CAO, STORED PROCEDURE & GIAO DỊCH POS CHECKOUT
+
+## 📌 1. Tổng quan nội dung đã hoàn thành
+Toàn bộ mã nguồn cũ được **giữ nguyên 100%**, bổ sung đầy đủ các bài tập theo đề cương Buổi 5:
+
+### 🔹 Tiết 1: 3 Bài tập nền tảng ADO.NET (Console App `ThucHanhAdoNet_Buoi05`)
+- **Bài tập 1**: Đếm tổng số mặt hàng bằng `ExecuteScalar()`.
+- **Bài tập 2**: Cập nhật tồn kho sản phẩm an toàn bằng `ExecuteNonQuery()` và `SqlParameter` (chống SQL Injection).
+- **Bài tập 3**: Duyệt danh sách sản phẩm tốc độ cao bằng `SqlDataReader` (Forward-Only).
+
+### 🔹 Tiết 2: Tra cứu Barcode siêu tốc & Mô hình ngắt kết nối (`AdoProductController.cs`)
+- `GET /api/ado-products/barcode/{barcode}`: Tra cứu thông tin sản phẩm theo mã vạch bằng `SqlDataReader` (Connected Mode, phản hồi < 100ms).
+- `GET /api/ado-products/disconnected-cache`: Nạp dữ liệu vào `DataTable` qua `SqlDataAdapter.Fill()` và ngắt kết nối ngay (Disconnected Mode).
+- **Bài tập 2.1**: `GET /api/ado-products/filter-stock?minStock=50`: Tra cứu sản phẩm có tồn kho thấp để cảnh báo nhập hàng.
+- **Bài tập 2.2**: `GET /api/ado-products/category-summary`: Đếm số lượng sản phẩm theo từng nhóm danh mục bằng `DataTable`.
+
+### 🔹 Tiết 3: Stored Procedure & Báo cáo doanh thu ca trực (`ReportsController.cs`)
+- Đã khởi tạo script CSDL `Scripts/Buoi05_Setup.sql` gồm bảng `Orders`, `OrderDetails`, seed 15 hóa đơn mẫu chuẩn xác.
+- `GET /api/reports/revenue-by-cashier`: Gọi Stored Procedure `sp_GetRevenueByCashier` trả về thống kê 5 thu ngân (khớp 100% 4,822,000 đ).
+- **Bài tập 3.1**: `GET /api/reports/revenue-by-date?fromDate=...&toDate=...`: Thực thi Stored Procedure `sp_GetRevenueByDateRange`.
+- **Bài tập 3.2**: `GET /api/reports/top-selling-products`: Thực thi Stored Procedure `sp_GetTop5SellingProducts` tìm top 5 sản phẩm bán chạy nhất.
+
+### 🔹 Tiết 4: Chuẩn ACID & Mô phỏng Rollback (`ThucHanhAdoNet_Buoi05`)
+- Kiểm chứng vòng đời `BeginTransaction()` -> `Commit()` -> `Rollback()`.
+- Mô phỏng ngoại lệ thiếu hàng kho tại Bước 2, tự động Rollback hoàn trả dữ liệu Bước 1, bảo đảm tồn kho không bị trừ sai.
+
+### 🔹 Tiết 5: API Checkout đa bảng bọc SqlTransaction (`CheckoutController.cs`)
+- `POST /api/checkout`:
+  1. Tạo hóa đơn `Orders` và nhận lại `OrderId` bằng `OUTPUT INSERTED.OrderId` với `ExecuteScalar()`.
+  2. Kiểm tra tồn kho từng sản phẩm với `SqlDataReader`, lưu `OrderDetails`, trừ tồn kho `Products`.
+  3. Cộng điểm thưởng cho khách hàng `Customers`.
+  4. Xác nhận `transaction.Commit()`.
+  5. Nếu có lỗi (hết hàng): tự động `transaction.Rollback()`, không để lại dữ liệu rác.
+- **Bài tập mở rộng**: `DELETE /api/checkout/cancel/{orderId}`:
+  1. Đọc lại chi tiết đơn hàng, cộng hoàn trả tồn kho `Products`.
+  2. Khấu trừ lại điểm thưởng khách hàng `Customers`.
+  3. Xóa `OrderDetails` và `Orders` được bọc toàn diện trong `SqlTransaction`.
+
+## 🛠️ 2. Hướng dẫn chạy & Kiểm thử
+
+### Chạy kiểm tra Console App Buổi 5 (Tiết 1 & Tiết 4):
+```bash
+dotnet run --project ThucHanhAdoNet_Buoi05
+# Hoặc chạy nhanh toàn bộ các bài tập:
+dotnet run --project ThucHanhAdoNet_Buoi05 -- all
+```
+
+### Chạy Web API và Swagger UI (Tiết 2, Tiết 3, Tiết 5):
+```bash
+dotnet run --project MiniSupermarket.API
+```
+Mở trình duyệt: `https://localhost:7046/swagger` hoặc `http://localhost:5017/swagger` để kiểm thử tương tác trực quan các nhóm API:
+- `AdoProduct`
+- `Reports`
+- `Checkout`
+
