@@ -1,329 +1,142 @@
-🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI (MINISUPERMARKET SYSTEM)
+# 🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI --- BUỔI 4
+
+**Môn học:** Lập trình Ứng dụng .NET Core (229162)\
+**Sinh viên:** Bùi Thị Diễm Trinh\
+**MSSV:** 2124110287\
+**Lớp học phần:** CCQ2411D
+
+## 1. Mục tiêu
+
+-   Xây dựng `FormMainShell` theo kiến trúc Single-Form Architecture.
+-   Dùng `panelSidebar` làm thanh điều hướng và `panelMainContent` làm
+    vùng hiển thị nghiệp vụ.
+-   Nhúng Form con bằng `TopLevel = false`, `FormBorderStyle = None`,
+    `Dock = Fill`.
+-   Phân quyền giao diện theo ba vai trò: `Admin`, `Cashier`,
+    `Warehouse`.
+-   Hiển thị thông tin người dùng, tiêu đề màn hình và chức năng đăng
+    xuất.
+
+## 2. Công nghệ
+
+C# / .NET 8.0, Windows Forms, ASP.NET Core Web API, Entity Framework
+Core, SQL Server, `HttpClient`, `System.Net.Http.Json`, Visual Studio
+2022.
+
+## 3. Kiến trúc giao diện
+
+-   `panelSidebar`: thanh chức năng bên trái, rộng khoảng 230 px.
+-   `panelTopHeader`: hiển thị tiêu đề màn hình và thông tin người dùng.
+-   `panelMainContent`: vùng nhúng Form con.
+-   `panelUserFooter`: khu vực đăng xuất ở cuối Sidebar.
+
+  Nút               Chức năng
+  ----------------- -------------------------
+  `btnPOS`          Bán hàng
+  `btnCategory`     Quản lý danh mục
+  `btnProduct`      Quản lý sản phẩm và kho
+  `btnCustomer`     Quản lý khách hàng
+  `btnReports`      Báo cáo doanh thu
+  `btnUserManage`   Quản trị tài khoản
+  `btnLogout`       Đăng xuất
+
+## 4. Nhúng Form con
+
+Hàm `OpenChildForm()` đóng Form con cũ, làm nổi bật nút đang chọn, đặt
+`TopLevel = false`, `FormBorderStyle = None`, `Dock = Fill`, thêm Form
+vào `panelMainContent`, cập nhật `lblTitle` và gọi `Show()`. Nhờ đó, các
+màn hình nghiệp vụ chạy trong cùng cửa sổ chính.
+
+## 5. Phân quyền RBAC
+
+  Chức năng               Admin   Cashier   Warehouse
+  ---------------------- ------- --------- -----------
+  Bán hàng POS              ✓        ✓         ---
+  Quản lý danh mục          ✓       ---         ✓
+  Quản lý sản phẩm/kho      ✓       ---         ✓
+  Quản lý khách hàng        ✓        ✓         ---
+  Báo cáo doanh thu         ✓       ---        ---
+  Quản trị tài khoản        ✓       ---        ---
+
+-   **Admin:** toàn quyền.
+-   **Cashier (Thu ngân):** POS và khách hàng.
+-   **Warehouse (Thủ kho):** danh mục và sản phẩm/kho.
+-   **Vai trò không hợp lệ:** hiển thị cảnh báo và đóng màn hình.
+
+Ẩn nút chỉ là kiểm soát phía Client. Backend/API cũng phải xác thực và
+kiểm tra quyền để bảo vệ dữ liệu.
+
+## 6. Màn hình mặc định
+
+Theo bảng tổng kết của bài thực hành: - Admin →
+`FormCategoryManagement`. - Cashier → `FormPOS`. - Warehouse →
+`FormProductManagement`.
+
+Lưu ý: phần hướng dẫn ban đầu có lựa chọn màn hình mặc định khác; cần
+thống nhất theo lựa chọn trên trong mã nguồn.
+
+## 7. Các Form nghiệp vụ
+
+-   **`FormCategoryManagement`:** tải, thêm, sửa, xóa và tìm kiếm danh
+    mục.
+-   **`FormCustomerManagement`:** quản lý thông tin khách hàng, địa chỉ,
+    điểm tích lũy và hạng thành viên; hỗ trợ CRUD và tìm kiếm.
+-   **`FormPOS`:** quét mã vạch, quản lý giỏ hàng, tính tổng tiền/tiền
+    thừa và gửi yêu cầu thanh toán. Cần có API tra cứu sản phẩm theo mã
+    vạch và API `orders/checkout`.
+-   **`FormProductManagement`:** tìm kiếm, thêm, sửa, xóa sản phẩm, chọn
+    danh mục và quản lý tồn kho.
+-   **`FormUserManagement`:** hiển thị/tạo tài khoản và quản lý vai trò;
+    chỉ Admin được truy cập. Chức năng khóa tài khoản/đặt lại mật khẩu
+    cần API tương ứng.
+-   **`FormQuickReport`:** chọn ngày, hiển thị số hóa đơn, doanh thu và
+    mặt hàng bán chạy; chỉ Admin được xem, cần API báo cáo tương ứng.
+
+## 8. Đăng xuất
+
+Khi nhấn `btnLogout`, ứng dụng hỏi xác nhận. Nếu đồng ý, xóa `JwtToken`,
+`CurrentUsername`, `CurrentRole`, ẩn Form chính và mở `FormLogin`.
+
+## 9. Kiểm thử phân quyền
+
+  Tài khoản mẫu   Vai trò     Kết quả mong đợi
+  --------------- ----------- -------------------------------
+  `admin01`       Admin       Hiển thị đầy đủ chức năng
+  `cashier01`     Cashier     Chỉ hiện POS và Khách hàng
+  `ware01`        Warehouse   Chỉ hiện Danh mục và Sản phẩm
 
-Môn học: Lập trình Ứng dụng .NET Core (Mã môn: 229162)
-Buổi thực hành: Buổi 3 - Xây dựng Web API quản lý danh mục, khách hàng và kết nối WinForms Client (CRUD)
+Mật khẩu mẫu trong tài liệu: `123456` (chỉ dùng cho bài tập).
 
-🏗️ 1. Mô hình kiến trúc hệ thống
+Checklist: - \[ \] Ứng dụng chỉ có một cửa sổ chính. - \[ \] Form con
+lấp đầy `panelMainContent`. - \[ \] Nút đang chọn đổi màu; tiêu đề cập
+nhật đúng. - \[ \] Menu hiển thị đúng theo vai trò. - \[ \] Chức năng
+không được cấp quyền bị chặn ở cả Client và API. - \[ \] CRUD hoạt động
+và dữ liệu được lưu trong SQL Server. - \[ \] Đăng xuất xóa thông tin
+phiên người dùng.
 
-Dự án được xây dựng theo mô hình Client - Server:
+## 10. Cấu hình và thứ tự chạy
 
-MiniSupermarket.API: ASP.NET Core Web API xử lý API, nghiệp vụ, kết nối SQL Server và Entity Framework Core.
+API: `https://localhost:7046/api/`\
+Swagger: `https://localhost:7046/swagger`
 
-MiniSupermarket.WinForms: ứng dụng Windows Forms sử dụng HttpClient và System.Net.Http.Json để gọi API và hiển thị dữ liệu trên DataGridView.
+1.  Khởi động SQL Server và kiểm tra database
+    `BuiThiDiemTrinhMiniSupermarketDb`.
+2.  Chạy `MiniSupermarket.API`.
+3.  Kiểm tra API qua Swagger.
+4.  Chạy `MiniSupermarket.WinForms`.
+5.  Đăng nhập bằng tài khoản thử nghiệm và kiểm tra từng vai trò.
 
-🛠️ 2. Công nghệ sử dụng
+Nếu WinForms gọi `localhost:7123`, đổi sang
+`https://localhost:7046/api/`.
 
-C# / .NET 8.0
+## 11. Kết quả mong đợi
 
-ASP.NET Core Web API
+Hoàn thành giao diện quản lý tập trung, nhúng động Form con, điều hướng
+theo vai trò và hiển thị các chức năng phù hợp. POS, quản lý sản phẩm,
+tài khoản và báo cáo chỉ hoạt động đầy đủ khi API nghiệp vụ tương ứng đã
+được triển khai.
 
-Entity Framework Core
+------------------------------------------------------------------------
 
-SQL Server
-
-Windows Forms
-
-HttpClient / System.Net.Http.Json
-
-Swagger UI
-
-Visual Studio 2022
-
-🗄️ 3. Cơ sở dữ liệu
-
-Database: BuiThiDiemTrinhMiniSupermarketDb
-
-Connection String:
-
-"DefaultConnection": "Server=.;Database=BuiThiDiemTrinhMiniSupermarketDb;User Id=sa;Password=123456;MultipleActiveResultSets=true;TrustServerCertificate=True"
-
-Các bảng hiện có:
-
-Categories
-
-Products
-
-Customers
-
-__EFMigrationsHistory
-
-15 nhóm hàng mẫu
-
-Bánh kẹo & Đồ ăn vặt
-
-Nước giải khát
-
-Sữa & Sản phẩm từ sữa
-
-Mì & Thực phẩm ăn liền
-
-Gia vị & Nấu ăn
-
-Gạo & Ngũ cốc
-
-Đồ hộp & Thực phẩm đóng gói
-
-Cà phê & Trà
-
-Nước chấm & Sốt
-
-Đồ dùng gia đình
-
-Hóa mỹ phẩm
-
-Giấy & Đồ dùng cá nhân
-
-Đồ dùng học tập
-
-Thực phẩm đông lạnh
-
-Đồ dùng trẻ em
-
-3 khách hàng mẫu
-
-Nguyễn Văn A - 0901122334 - Vàng - 150 điểm
-
-Trần Thị B - 0918877665 - Bạc - 50 điểm
-
-Lê Văn C - 0983344556 - Chuẩn - 10 điểm
-
-Thông tin khách hàng:
-
-CustomerId, CustomerName, PhoneNumber, Address, Ward, District, Province, RewardPoints, MembershipRank.
-
-📂 4. Cấu trúc Solution
-
-MiniSupermarketSystem/
-├── MiniSupermarket.API/
-│   ├── Controllers/
-│   │   ├── CategoriesController.cs
-│   │   └── CustomersController.cs
-│   ├── Data/
-│   │   └── SupermarketDbContext.cs
-│   ├── Models/
-│   │   ├── Category.cs
-│   │   ├── Product.cs
-│   │   └── Customer.cs
-│   ├── Migrations/
-│   │   ├── InitialCreateDatabase
-│   │   └── AddCustomer
-│   ├── Program.cs
-│   └── appsettings.json
-└── MiniSupermarket.WinForms/
-    ├── FormCategoryManagement.cs
-    ├── FormCategoryManagement.Designer.cs
-    ├── FormCustomerManagement.cs
-    ├── FormCustomerManagement.Designer.cs
-    └── Program.cs
-
-🔌 5. Cấu hình API
-
-API hiện chạy tại:
-
-https://localhost:7046/api/
-
-WinForms:
-
-private static readonly HttpClient _client = new HttpClient
-{
-    BaseAddress = new Uri("https://localhost:7046/api/")
-};
-
-Lưu ý: Không dùng port 7123. Nếu báo lỗi localhost:7123, sửa thành 7046.
-
-🚀 6. Backend API
-
-6.1. Categories
-
-GET    /api/categories
-GET    /api/categories/{id}
-GET    /api/categories/search?keyword=...
-POST   /api/categories
-PUT    /api/categories/{id}
-DELETE /api/categories/{id}
-
-6.2. Customers
-
-GET    /api/customers
-GET    /api/customers/{id}
-GET    /api/customers/search?keyword=...
-POST   /api/customers
-PUT    /api/customers/{id}
-DELETE /api/customers/{id}
-
-Tìm kiếm khách hàng theo tên, số điện thoại, địa chỉ, phường, quận/huyện hoặc tỉnh/thành phố.
-
-🖥️ 7. WinForms Client
-
-FormCategoryManagement
-
-Chức năng:
-
-Tải danh sách
-
-Thêm
-
-Cập nhật
-
-Xóa
-
-Tìm kiếm
-
-Chọn dòng trên DataGridView để sửa
-
-FormCustomerManagement
-
-Các trường:
-
-Mã khách hàng
-
-Tên khách hàng
-
-Số điện thoại
-
-Địa chỉ
-
-Phường
-
-Quận/Huyện
-
-Tỉnh/TP
-
-Điểm tích lũy
-
-Hạng thành viên
-
-Tìm kiếm
-
-Chức năng:
-
-Tải dữ liệu
-
-Thêm khách hàng
-
-Cập nhật khách hàng
-
-Xóa khách hàng
-
-Tìm kiếm khách hàng
-
-Chọn dòng để đưa dữ liệu lên ô nhập
-
-Program.cs hiện có thể chạy Form khách hàng bằng:
-
-Application.Run(new FormCustomerManagement());
-
-🧩 8. Entity Framework Core và Migration
-
-Migration ban đầu:
-
-Add-Migration InitialCreateDatabase
-Update-Database
-
-Migration thêm khách hàng:
-
-Add-Migration AddCustomer
-Update-Database
-
-Kiểm tra database:
-
-USE BuiThiDiemTrinhMiniSupermarketDb;
-
-SELECT * FROM dbo.Categories;
-SELECT * FROM dbo.Products;
-SELECT * FROM dbo.Customers;
-
-🧪 9. Kiểm thử Swagger
-
-Chạy MiniSupermarket.API, sau đó mở:
-
-https://localhost:7046/swagger
-
-Kiểm tra:
-
-Categories: GET, POST, PUT, DELETE, Search
-
-Customers: GET, POST, PUT, DELETE, Search
-
-🧪 10. Kiểm thử WinForms
-
-Chạy MiniSupermarket.API.
-
-Kiểm tra API tại port 7046.
-
-Chạy MiniSupermarket.WinForms.
-
-Kiểm tra tải dữ liệu.
-
-Thử thêm, cập nhật, xóa và tìm kiếm khách hàng.
-
-Có thể kiểm tra tương tự với nhóm hàng.
-
-Dữ liệu được lưu trong SQL Server nên sau khi tắt và mở lại ứng dụng, dữ liệu vẫn còn.
-
-⚠️ 11. Các lỗi đã gặp và cách xử lý
-
-Lỗi port 7123
-
-Nếu WinForms báo:
-
-No connection could be made... localhost:7123
-
-sửa:
-
-https://localhost:7123/api/
-
-thành:
-
-https://localhost:7046/api/
-
-Lỗi file WinForms.exe đang được sử dụng
-
-Nếu Build báo file đang bị process MiniSupermarket.WinForms khóa:
-
-Shift + F5
-
-Mở Task Manager
-
-End Task MiniSupermarket.WinForms
-
-Build → Rebuild Solution
-
-Lỗi SQL Server không tìm thấy dbo.Categories
-
-Do đang ở database master. Chạy:
-
-USE BuiThiDiemTrinhMiniSupermarketDb;
-SELECT * FROM dbo.Categories;
-
-Package Manager Console hỏi Name
-
-Nếu nhập:
-
-Add-Migration
-
-PMC hỏi Name: thì nhập:
-
-AddCustomer
-
-sau đó:
-
-Update-Database
-
-▶️ 12. Thứ tự chạy
-
-SQL Server
-    ↓
-MiniSupermarket.API
-    ↓
-https://localhost:7046/swagger
-    ↓
-MiniSupermarket.WinForms
-    ↓
-CRUD + Search
-
-👨‍💻 13. Thông tin sinh viên
-
-Họ tên: Bùi Thị Diễm Trinh
-Mã sinh viên: 2124110287
-Lớp học phần: CCQ2411D
+**Ghi chú:** Trong hệ thống thực tế, không được chỉ dựa vào việc ẩn nút
+trên giao diện; Backend/API phải kiểm tra quyền truy cập.
