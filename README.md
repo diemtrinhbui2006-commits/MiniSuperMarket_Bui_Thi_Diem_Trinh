@@ -1,329 +1,222 @@
-🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI (MINISUPERMARKET SYSTEM)
+# 🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI --- README BUỔI 3
 
-Môn học: Lập trình Ứng dụng .NET Core (Mã môn: 229162)
-Buổi thực hành: Buổi 3 - Xây dựng Web API quản lý danh mục, khách hàng và kết nối WinForms Client (CRUD)
+**Môn học:** Lập trình Ứng dụng .NET Core (229162)\
+**Sinh viên:** Bùi Thị Diễm Trinh\
+**MSSV:** 2124110287\
+**Lớp học phần:** CCQ2411D
 
-🏗️ 1. Mô hình kiến trúc hệ thống
+## 1. Mục tiêu thực hành
 
-Dự án được xây dựng theo mô hình Client - Server:
+-   Chuyển dữ liệu từ bộ nhớ tạm In-Memory sang SQL Server để dữ liệu
+    được lưu lâu dài.
+-   Sử dụng Entity Framework Core (EF Core) theo phương pháp Code-First.
+-   Tạo và cập nhật cơ sở dữ liệu bằng EF Core Migrations.
+-   Truy vấn dữ liệu bằng LINQ kết hợp `async/await`.
+-   Kết nối Web API với ứng dụng WinForms để thực hiện CRUD.
 
-MiniSupermarket.API: ASP.NET Core Web API xử lý API, nghiệp vụ, kết nối SQL Server và Entity Framework Core.
+## 2. Công nghệ sử dụng
 
-MiniSupermarket.WinForms: ứng dụng Windows Forms sử dụng HttpClient và System.Net.Http.Json để gọi API và hiển thị dữ liệu trên DataGridView.
+-   C# / .NET 8.0
+-   ASP.NET Core Web API
+-   Entity Framework Core
+-   Microsoft SQL Server
+-   Windows Forms
+-   `HttpClient`, `System.Net.Http.Json`
+-   Swagger UI
+-   Visual Studio 2022
 
-🛠️ 2. Công nghệ sử dụng
+## 3. Cài đặt NuGet Packages
 
-C# / .NET 8.0
+Trong project `MiniSupermarket.API`, cài đặt:
 
-ASP.NET Core Web API
+-   `Microsoft.EntityFrameworkCore.SqlServer`
+-   `Microsoft.EntityFrameworkCore.Tools`
+-   `Microsoft.EntityFrameworkCore.Design`
 
-Entity Framework Core
+Các gói này hỗ trợ kết nối SQL Server, tạo migration và thiết kế cấu
+trúc cơ sở dữ liệu.
 
-SQL Server
+## 4. Model và DbContext
 
-Windows Forms
+### `Category.cs`
 
-HttpClient / System.Net.Http.Json
+-   `CategoryId`: khóa chính, tự tăng.
+-   `CategoryName`: tên danh mục, bắt buộc, tối đa 100 ký tự.
+-   `Description`: mô tả tùy chọn.
+-   `Products`: quan hệ một danh mục có nhiều sản phẩm.
 
-Swagger UI
+### `Product.cs`
 
-Visual Studio 2022
+-   `ProductId`: khóa chính, tự tăng.
+-   `Barcode`: mã vạch sản phẩm.
+-   `ProductName`: tên sản phẩm.
+-   `Price`: giá bán kiểu `decimal(18,2)`.
+-   `StockQuantity`: số lượng tồn kho.
+-   `CategoryId`: khóa ngoại liên kết với `Category`.
 
-🗄️ 3. Cơ sở dữ liệu
+### `SupermarketDbContext.cs`
 
-Database: BuiThiDiemTrinhMiniSupermarketDb
+-   Kế thừa `DbContext`.
+-   Khai báo `DbSet<Category>`, `DbSet<Product>` và `DbSet<Customer>`.
+-   Cấu hình dữ liệu mẫu bằng `HasData()` trong `OnModelCreating()`.
 
-Connection String:
+## 5. Cấu hình kết nối SQL Server
 
-"DefaultConnection": "Server=.;Database=BuiThiDiemTrinhMiniSupermarketDb;User Id=sa;Password=123456;MultipleActiveResultSets=true;TrustServerCertificate=True"
+Trong `appsettings.json`, cấu hình chuỗi kết nối phù hợp với máy đang sử
+dụng. Ví dụ dùng Windows Authentication:
 
-Các bảng hiện có:
-
-Categories
-
-Products
-
-Customers
-
-__EFMigrationsHistory
-
-15 nhóm hàng mẫu
-
-Bánh kẹo & Đồ ăn vặt
-
-Nước giải khát
-
-Sữa & Sản phẩm từ sữa
-
-Mì & Thực phẩm ăn liền
-
-Gia vị & Nấu ăn
-
-Gạo & Ngũ cốc
-
-Đồ hộp & Thực phẩm đóng gói
-
-Cà phê & Trà
-
-Nước chấm & Sốt
-
-Đồ dùng gia đình
-
-Hóa mỹ phẩm
-
-Giấy & Đồ dùng cá nhân
-
-Đồ dùng học tập
-
-Thực phẩm đông lạnh
-
-Đồ dùng trẻ em
-
-3 khách hàng mẫu
-
-Nguyễn Văn A - 0901122334 - Vàng - 150 điểm
-
-Trần Thị B - 0918877665 - Bạc - 50 điểm
-
-Lê Văn C - 0983344556 - Chuẩn - 10 điểm
-
-Thông tin khách hàng:
-
-CustomerId, CustomerName, PhoneNumber, Address, Ward, District, Province, RewardPoints, MembershipRank.
-
-📂 4. Cấu trúc Solution
-
-MiniSupermarketSystem/
-├── MiniSupermarket.API/
-│   ├── Controllers/
-│   │   ├── CategoriesController.cs
-│   │   └── CustomersController.cs
-│   ├── Data/
-│   │   └── SupermarketDbContext.cs
-│   ├── Models/
-│   │   ├── Category.cs
-│   │   ├── Product.cs
-│   │   └── Customer.cs
-│   ├── Migrations/
-│   │   ├── InitialCreateDatabase
-│   │   └── AddCustomer
-│   ├── Program.cs
-│   └── appsettings.json
-└── MiniSupermarket.WinForms/
-    ├── FormCategoryManagement.cs
-    ├── FormCategoryManagement.Designer.cs
-    ├── FormCustomerManagement.cs
-    ├── FormCustomerManagement.Designer.cs
-    └── Program.cs
-
-🔌 5. Cấu hình API
-
-API hiện chạy tại:
-
-https://localhost:7046/api/
-
-WinForms:
-
-private static readonly HttpClient _client = new HttpClient
+``` json
 {
-    BaseAddress = new Uri("https://localhost:7046/api/")
-};
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=BuiThiDiemTrinhMiniSupermarketDb;Trusted_Connection=True;TrustServerCertificate=True;"
+  }
+}
+```
 
-Lưu ý: Không dùng port 7123. Nếu báo lỗi localhost:7123, sửa thành 7046.
+Nếu giảng viên yêu cầu SQL Server Authentication, có thể dùng
+`User Id=sa;Password=...` với thông tin được cấp cho máy thực hành.
+Không nên tự ý đổi mật khẩu `sa` trên máy dùng chung. Nếu dùng SQL
+Express, tên Server có thể là `Server=.\\SQLEXPRESS;`.
 
-🚀 6. Backend API
+Đăng ký `SupermarketDbContext` trong `Program.cs` bằng `AddDbContext` và
+`UseSqlServer` trước `builder.Build()`.
 
-6.1. Categories
+## 6. EF Core Migrations
 
-GET    /api/categories
-GET    /api/categories/{id}
-GET    /api/categories/search?keyword=...
-POST   /api/categories
-PUT    /api/categories/{id}
-DELETE /api/categories/{id}
+Trong Package Manager Console, chọn `MiniSupermarket.API` ở ô Default
+project rồi chạy:
 
-6.2. Customers
-
-GET    /api/customers
-GET    /api/customers/{id}
-GET    /api/customers/search?keyword=...
-POST   /api/customers
-PUT    /api/customers/{id}
-DELETE /api/customers/{id}
-
-Tìm kiếm khách hàng theo tên, số điện thoại, địa chỉ, phường, quận/huyện hoặc tỉnh/thành phố.
-
-🖥️ 7. WinForms Client
-
-FormCategoryManagement
-
-Chức năng:
-
-Tải danh sách
-
-Thêm
-
-Cập nhật
-
-Xóa
-
-Tìm kiếm
-
-Chọn dòng trên DataGridView để sửa
-
-FormCustomerManagement
-
-Các trường:
-
-Mã khách hàng
-
-Tên khách hàng
-
-Số điện thoại
-
-Địa chỉ
-
-Phường
-
-Quận/Huyện
-
-Tỉnh/TP
-
-Điểm tích lũy
-
-Hạng thành viên
-
-Tìm kiếm
-
-Chức năng:
-
-Tải dữ liệu
-
-Thêm khách hàng
-
-Cập nhật khách hàng
-
-Xóa khách hàng
-
-Tìm kiếm khách hàng
-
-Chọn dòng để đưa dữ liệu lên ô nhập
-
-Program.cs hiện có thể chạy Form khách hàng bằng:
-
-Application.Run(new FormCustomerManagement());
-
-🧩 8. Entity Framework Core và Migration
-
-Migration ban đầu:
-
+``` powershell
 Add-Migration InitialCreateDatabase
 Update-Database
+```
 
-Migration thêm khách hàng:
+Khi thêm bảng khách hàng, chạy migration mới, ví dụ:
 
-Add-Migration AddCustomer
+``` powershell
+Add-Migration AddCustomersTable
 Update-Database
+```
 
-Kiểm tra database:
+Chỉ tạo migration mới khi model đã thay đổi và kiểm tra xem migration
+tương ứng đã tồn tại hay chưa. Nếu dự án đã có migration, không tạo lại
+`InitialCreateDatabase` một cách tùy tiện.
 
+## 7. Categories API
+
+`CategoriesController` sử dụng `SupermarketDbContext` thông qua
+constructor injection và thao tác dữ liệu trực tiếp với SQL Server.
+
+  HTTP     Endpoint                               Chức năng
+  -------- -------------------------------------- -------------------
+  GET      `/api/categories`                      Lấy danh sách
+  GET      `/api/categories/{id}`                 Xem chi tiết
+  GET      `/api/categories/search?keyword=...`   Tìm kiếm theo tên
+  POST     `/api/categories`                      Thêm danh mục
+  PUT      `/api/categories/{id}`                 Cập nhật
+  DELETE   `/api/categories/{id}`                 Xóa
+
+Các phương thức bất đồng bộ tiêu biểu: `ToListAsync()`, `FindAsync()`,
+`SaveChangesAsync()`. `AsNoTracking()` phù hợp với truy vấn chỉ đọc.
+
+## 8. Bài tập mở rộng: Customers
+
+### Model `Customer.cs`
+
+Các trường chính:
+
+-   `CustomerId`: khóa chính, tự tăng.
+-   `CustomerName`: tên khách hàng, bắt buộc.
+-   `PhoneNumber`: số điện thoại, bắt buộc.
+-   `Address`: địa chỉ, tùy chọn.
+-   `RewardPoints`: điểm tích lũy, mặc định 0.
+-   `MembershipRank`: hạng thành viên, mặc định `Chuẩn`.
+
+Có thể bổ sung `Ward`, `District`, `Province` nếu mô hình của dự án hiện
+tại đang sử dụng các trường địa chỉ chi tiết này.
+
+### Dữ liệu mẫu
+
+  Khách hàng     Số điện thoại   Hạng      Điểm
+  -------------- --------------- ------- ------
+  Nguyễn Văn A   0901122334      Vàng       150
+  Trần Thị B     0918877665      Bạc         50
+  Lê Văn C       0983344556      Chuẩn       10
+
+Để seed dữ liệu bằng `HasData()`, cần gán `CustomerId` cố định cho từng
+bản ghi.
+
+### Customers API
+
+  -------------------------------------------------------------------------------------
+  HTTP                    Endpoint                              Chức năng
+  ----------------------- ------------------------------------- -----------------------
+  GET                     `/api/customers`                      Lấy danh sách
+
+  GET                     `/api/customers/{id}`                 Xem chi tiết
+
+  GET                     `/api/customers/search?keyword=...`   Tìm theo tên/số điện
+                                                                thoại
+
+  POST                    `/api/customers`                      Thêm khách hàng
+
+  PUT                     `/api/customers/{id}`                 Cập nhật khách hàng
+
+  DELETE                  `/api/customers/{id}`                 Xóa khách hàng
+  -------------------------------------------------------------------------------------
+
+## 9. WinForms Client
+
+`FormCategoryManagement` và `FormCustomerManagement` sử dụng
+`HttpClient` để gọi Web API.
+
+Các thao tác cần kiểm thử: - Tải danh sách vào `DataGridView`. - Chọn
+một dòng để hiển thị dữ liệu lên các ô nhập. - Thêm mới, cập nhật, xóa
+và tìm kiếm. - Hiển thị thông báo khi API trả về lỗi hoặc thao tác thất
+bại.
+
+Cần đảm bảo địa chỉ API và cổng trong WinForms khớp với cổng đang chạy
+của project API. Trong cấu hình hiện tại của dự án, API dùng
+`https://localhost:7046/api/`; không dùng cổng cũ `7123` nếu API không
+chạy ở cổng đó.
+
+## 10. Kiểm thử và xác nhận dữ liệu
+
+1.  Chạy `MiniSupermarket.API`.
+2.  Mở Swagger để thử các endpoint.
+3.  Mở SSMS, chọn đúng database và kiểm tra dữ liệu:
+
+``` sql
 USE BuiThiDiemTrinhMiniSupermarketDb;
-
+GO
 SELECT * FROM dbo.Categories;
 SELECT * FROM dbo.Products;
 SELECT * FROM dbo.Customers;
+```
 
-🧪 9. Kiểm thử Swagger
+4.  Chạy WinForms, thử CRUD.
+5.  Tắt rồi mở lại API và WinForms; dữ liệu đã lưu phải vẫn còn trong
+    SQL Server.
 
-Chạy MiniSupermarket.API, sau đó mở:
+## 11. Checklist nghiệm thu
 
-https://localhost:7046/swagger
+-   [ ] Cài đủ các gói EF Core cần thiết.
+-   [ ] Cấu hình chuỗi kết nối đúng với SQL Server đang dùng.
+-   [ ] Đăng ký `SupermarketDbContext` trong `Program.cs`.
+-   [ ] Migration tạo/cập nhật đúng các bảng.
+-   [ ] Categories API đọc và ghi dữ liệu SQL Server.
+-   [ ] Customers API hoàn thành CRUD và tìm kiếm.
+-   [ ] WinForms gọi đúng API và hiển thị kết quả.
+-   [ ] Dữ liệu vẫn còn sau khi khởi động lại ứng dụng.
 
-Kiểm tra:
+## 12. Kết luận
 
-Categories: GET, POST, PUT, DELETE, Search
+Buổi 3 giúp sinh viên tích hợp SQL Server với ASP.NET Core Web API bằng
+EF Core Code-First, quản lý thay đổi cấu trúc cơ sở dữ liệu bằng
+Migrations và thực hiện CRUD bất đồng bộ. Phần mở rộng Customers áp dụng
+cùng quy trình cho dữ liệu khách hàng thân thiết, làm nền tảng cho chức
+năng tích điểm và thanh toán tại quầy POS.
 
-Customers: GET, POST, PUT, DELETE, Search
-
-🧪 10. Kiểm thử WinForms
-
-Chạy MiniSupermarket.API.
-
-Kiểm tra API tại port 7046.
-
-Chạy MiniSupermarket.WinForms.
-
-Kiểm tra tải dữ liệu.
-
-Thử thêm, cập nhật, xóa và tìm kiếm khách hàng.
-
-Có thể kiểm tra tương tự với nhóm hàng.
-
-Dữ liệu được lưu trong SQL Server nên sau khi tắt và mở lại ứng dụng, dữ liệu vẫn còn.
-
-⚠️ 11. Các lỗi đã gặp và cách xử lý
-
-Lỗi port 7123
-
-Nếu WinForms báo:
-
-No connection could be made... localhost:7123
-
-sửa:
-
-https://localhost:7123/api/
-
-thành:
-
-https://localhost:7046/api/
-
-Lỗi file WinForms.exe đang được sử dụng
-
-Nếu Build báo file đang bị process MiniSupermarket.WinForms khóa:
-
-Shift + F5
-
-Mở Task Manager
-
-End Task MiniSupermarket.WinForms
-
-Build → Rebuild Solution
-
-Lỗi SQL Server không tìm thấy dbo.Categories
-
-Do đang ở database master. Chạy:
-
-USE BuiThiDiemTrinhMiniSupermarketDb;
-SELECT * FROM dbo.Categories;
-
-Package Manager Console hỏi Name
-
-Nếu nhập:
-
-Add-Migration
-
-PMC hỏi Name: thì nhập:
-
-AddCustomer
-
-sau đó:
-
-Update-Database
-
-▶️ 12. Thứ tự chạy
-
-SQL Server
-    ↓
-MiniSupermarket.API
-    ↓
-https://localhost:7046/swagger
-    ↓
-MiniSupermarket.WinForms
-    ↓
-CRUD + Search
-
-👨‍💻 13. Thông tin sinh viên
-
-Họ tên: Bùi Thị Diễm Trinh
-Mã sinh viên: 2124110287
-Lớp học phần: CCQ2411D
+**Định hướng tiếp theo:** hoàn thiện quản lý sản phẩm và kho, lọc theo
+danh mục, tìm kiếm theo mã vạch và sử dụng `Include()` khi cần lấy dữ
+liệu quan hệ.
