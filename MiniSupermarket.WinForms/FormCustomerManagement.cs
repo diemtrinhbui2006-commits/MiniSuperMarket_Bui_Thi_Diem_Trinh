@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Json;
+using System.Net.Http.Json;
 
 namespace MiniSupermarket.WinForms
 {
@@ -87,15 +87,6 @@ namespace MiniSupermarket.WinForms
             txtAddress.Text =
                 row.Cells["Address"].Value?.ToString() ?? "";
 
-            txtWard.Text =
-                row.Cells["Ward"].Value?.ToString() ?? "";
-
-            txtDistrict.Text =
-                row.Cells["District"].Value?.ToString() ?? "";
-
-            txtProvince.Text =
-                row.Cells["Province"].Value?.ToString() ?? "";
-
             txtRewardPoints.Text =
                 row.Cells["RewardPoints"].Value?.ToString() ?? "0";
 
@@ -148,9 +139,6 @@ namespace MiniSupermarket.WinForms
                 CustomerName = txtCustomerName.Text.Trim(),
                 PhoneNumber = txtPhoneNumber.Text.Trim(),
                 Address = txtAddress.Text.Trim(),
-                Ward = txtWard.Text.Trim(),
-                District = txtDistrict.Text.Trim(),
-                Province = txtProvince.Text.Trim(),
                 RewardPoints = rewardPoints,
                 MembershipRank = string.IsNullOrWhiteSpace(txtMembershipRank.Text)
                     ? "Chuẩn"
@@ -243,9 +231,6 @@ namespace MiniSupermarket.WinForms
                 CustomerName = txtCustomerName.Text.Trim(),
                 PhoneNumber = txtPhoneNumber.Text.Trim(),
                 Address = txtAddress.Text.Trim(),
-                Ward = txtWard.Text.Trim(),
-                District = txtDistrict.Text.Trim(),
-                Province = txtProvince.Text.Trim(),
                 RewardPoints = rewardPoints,
                 MembershipRank = string.IsNullOrWhiteSpace(txtMembershipRank.Text)
                     ? "Chuẩn"
@@ -417,9 +402,6 @@ namespace MiniSupermarket.WinForms
             txtCustomerName.Clear();
             txtPhoneNumber.Clear();
             txtAddress.Clear();
-            txtWard.Clear();
-            txtDistrict.Clear();
-            txtProvince.Clear();
             txtRewardPoints.Text = "0";
             txtMembershipRank.Text = "Chuẩn";
         }
@@ -446,12 +428,6 @@ namespace MiniSupermarket.WinForms
         public string PhoneNumber { get; set; } = string.Empty;
 
         public string? Address { get; set; }
-
-        public string? Ward { get; set; }
-
-        public string? District { get; set; }
-
-        public string? Province { get; set; }
 
         public int RewardPoints { get; set; }
 

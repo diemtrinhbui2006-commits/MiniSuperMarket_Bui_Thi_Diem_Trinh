@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniSupermarket.API.Data;
 using MiniSupermarket.API.Models;
 
 namespace MiniSupermarket.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/products")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -48,6 +48,30 @@ namespace MiniSupermarket.API.Controllers
                 {
                     message = "Không tìm thấy sản phẩm."
                 });
+            }
+
+            return Ok(product);
+        }
+
+        // =========================================================
+        // GET: api/Product/barcode/8934567890001
+        // Lấy sản phẩm theo Barcode
+        // =========================================================
+        [HttpGet("barcode/{barcode}")]
+        public async Task<ActionResult<Product>> GetProductByBarcode(string barcode)
+        {
+            if (string.IsNullOrWhiteSpace(barcode))
+            {
+                return BadRequest(new { message = "Mã vạch không hợp lệ." });
+            }
+
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Barcode == barcode.Trim());
+
+            if (product == null)
+            {
+                return NotFound(new { message = "Không tìm thấy sản phẩm có mã vạch này." });
             }
 
             return Ok(product);

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MiniSupermarket.API.Models;
 
 namespace MiniSupermarket.API.Data
@@ -296,167 +296,115 @@ namespace MiniSupermarket.API.Data
                     CustomerId = 1,
                     CustomerName = "Nguyễn Thị Lan",
                     PhoneNumber = "0901234567",
-                    Address = "Số 25, đường Nguyễn Huệ",
-                    Ward = "Phường 1",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 25, đường Nguyễn Huệ, Phường 1, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Vàng",
                     RewardPoints = 250
                 },
-
                 new Customer
                 {
                     CustomerId = 2,
                     CustomerName = "Trần Văn Minh",
                     PhoneNumber = "0912345678",
-                    Address = "Số 50, đường Lê Lợi",
-                    Ward = "Phường 2",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 50, đường Lê Lợi, Phường 2, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Bạc",
                     RewardPoints = 120
                 },
-
                 new Customer
                 {
                     CustomerId = 3,
                     CustomerName = "Lê Thị Hồng",
                     PhoneNumber = "0987654321",
-                    Address = "Số 10, đường Nguyễn Trãi",
-                    Ward = "Phường 1",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 10, đường Nguyễn Trãi, Phường 1, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Chuẩn",
                     RewardPoints = 35
                 },
-
-                // 10 Khách hàng mới thêm
                 new Customer
                 {
                     CustomerId = 4,
                     CustomerName = "Phạm Hoàng Nam",
                     PhoneNumber = "0939112233",
-                    Address = "Số 88, đường Lý Thường Kiệt",
-                    Ward = "Phường 3",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 88, đường Lý Thường Kiệt, Phường 3, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Kim Cương",
                     RewardPoints = 680
                 },
-
                 new Customer
                 {
                     CustomerId = 5,
                     CustomerName = "Đặng Thu Thảo",
                     PhoneNumber = "0945223344",
-                    Address = "Số 15, đường Hùng Vương",
-                    Ward = "Phường 2",
-                    District = "Thành phố Sa Đéc",
-                    Province = "Đồng Tháp",
+                    Address = "Số 15, đường Hùng Vương, Phường 2, Thành phố Sa Đéc, Đồng Tháp",
                     MembershipRank = "Vàng",
                     RewardPoints = 310
                 },
-
                 new Customer
                 {
                     CustomerId = 6,
                     CustomerName = "Võ Văn Tuấn",
                     PhoneNumber = "0978334455",
-                    Address = "Số 102, đường Trần Hưng Đạo",
-                    Ward = "Phường 1",
-                    District = "Thành phố Sa Đéc",
-                    Province = "Đồng Tháp",
+                    Address = "Số 102, đường Trần Hưng Đạo, Phường 1, Thành phố Sa Đéc, Đồng Tháp",
                     MembershipRank = "Bạc",
                     RewardPoints = 150
                 },
-
                 new Customer
                 {
                     CustomerId = 7,
                     CustomerName = "Bùi Thị Mai",
                     PhoneNumber = "0918445566",
-                    Address = "Số 42, đường Điện Biên Phủ",
-                    Ward = "Phường Mỹ Phú",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 42, đường Điện Biên Phủ, Phường Mỹ Phú, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Chuẩn",
                     RewardPoints = 50
                 },
-
                 new Customer
                 {
                     CustomerId = 8,
-                    CustomerName = "Ngo Thanh Tung",
+                    CustomerName = "Ngô Thanh Tùng",
                     PhoneNumber = "0927556677",
-                    Address = "Số 79, đường Nguyễn Sinh Cung",
-                    Ward = "Phường 2",
-                    District = "Thành phố Sa Đéc",
-                    Province = "Đồng Tháp",
+                    Address = "Số 79, đường Nguyễn Sinh Cung, Phường 2, Thành phố Sa Đéc, Đồng Tháp",
                     MembershipRank = "Vàng",
                     RewardPoints = 290
                 },
-
                 new Customer
                 {
                     CustomerId = 9,
                     CustomerName = "Dương Quốc Bảo",
                     PhoneNumber = "0966667788",
-                    Address = "Số 14, đường Võ Trường Toản",
-                    Ward = "Phường 4",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 14, đường Võ Trường Toản, Phường 4, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Bạc",
                     RewardPoints = 180
                 },
-
                 new Customer
                 {
                     CustomerId = 10,
                     CustomerName = "Hoàng Kim Ngân",
                     PhoneNumber = "0908778899",
-                    Address = "Số 63, đường Phạm Hữu Lầu",
-                    Ward = "Phường 6",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 63, đường Phạm Hữu Lầu, Phường 6, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Chuẩn",
                     RewardPoints = 15
                 },
-
                 new Customer
                 {
                     CustomerId = 11,
                     CustomerName = "Đỗ Duy Khoa",
                     PhoneNumber = "0931889900",
-                    Address = "Số 05, đường Nguyễn Huệ",
-                    Ward = "Phường An Thạnh",
-                    District = "Thành phố Hồng Ngự",
-                    Province = "Đồng Tháp",
+                    Address = "Số 05, đường Nguyễn Huệ, Phường An Thạnh, Thành phố Hồng Ngự, Đồng Tháp",
                     MembershipRank = "Bạc",
                     RewardPoints = 95
                 },
-
                 new Customer
                 {
                     CustomerId = 12,
                     CustomerName = "Trịnh Tuyết Mai",
                     PhoneNumber = "0949990011",
-                    Address = "Số 118, đường Quốc Lộ 30",
-                    Ward = "Phường Mỹ Trà",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 118, đường Quốc Lộ 30, Phường Mỹ Trà, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Kim Cương",
                     RewardPoints = 820
                 },
-
                 new Customer
                 {
                     CustomerId = 13,
                     CustomerName = "Lý Văn Đức",
                     PhoneNumber = "0981001122",
-                    Address = "Số 200, đường Lê Đại Hành",
-                    Ward = "Phường Mỹ Phú",
-                    District = "Thành phố Cao Lãnh",
-                    Province = "Đồng Tháp",
+                    Address = "Số 200, đường Lê Đại Hành, Phường Mỹ Phú, Thành phố Cao Lãnh, Đồng Tháp",
                     MembershipRank = "Chuẩn",
                     RewardPoints = 40
                 }

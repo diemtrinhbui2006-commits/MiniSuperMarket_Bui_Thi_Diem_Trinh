@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MiniSupermarket.API.Data;
 using MiniSupermarket.API.Models;
@@ -56,10 +56,7 @@ namespace MiniSupermarket.API.Controllers
                 .Where(c =>
                     c.CustomerName.Contains(keyword) ||
                     c.PhoneNumber.Contains(keyword) ||
-                    (c.Address != null && c.Address.Contains(keyword)) ||
-                    (c.Ward != null && c.Ward.Contains(keyword)) ||
-                    (c.District != null && c.District.Contains(keyword)) ||
-                    (c.Province != null && c.Province.Contains(keyword)))
+                    (c.Address != null && c.Address.Contains(keyword)))
                 .ToListAsync();
 
             return customers;
@@ -123,9 +120,6 @@ namespace MiniSupermarket.API.Controllers
             existingCustomer.CustomerName = customer.CustomerName;
             existingCustomer.PhoneNumber = customer.PhoneNumber;
             existingCustomer.Address = customer.Address;
-            existingCustomer.Ward = customer.Ward;
-            existingCustomer.District = customer.District;
-            existingCustomer.Province = customer.Province;
             existingCustomer.RewardPoints = customer.RewardPoints;
             existingCustomer.MembershipRank = customer.MembershipRank;
 

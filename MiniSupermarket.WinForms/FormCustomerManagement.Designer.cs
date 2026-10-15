@@ -1,4 +1,4 @@
-﻿namespace MiniSupermarket.WinForms
+namespace MiniSupermarket.WinForms
 {
     partial class FormCustomerManagement
     {
@@ -148,66 +148,45 @@
             lblAddress.AutoSize = true;
             lblAddress.Location = new Point(40, 180);
             lblAddress.Name = "lblAddress";
-            lblAddress.Size = new Size(50, 15);
-            lblAddress.Text = "Địa chỉ:";
+            lblAddress.Size = new Size(95, 15);
+            lblAddress.Text = "Địa chỉ đầy đủ:";
 
             txtAddress.Location = new Point(150, 177);
             txtAddress.Name = "txtAddress";
-            txtAddress.Size = new Size(200, 23);
+            txtAddress.Size = new Size(525, 23);
 
             // ==============================
-            // WARD
+            // WARD (Hidden)
             // ==============================
 
-            lblWard.AutoSize = true;
-            lblWard.Location = new Point(390, 75);
-            lblWard.Name = "lblWard";
-            lblWard.Size = new Size(70, 15);
-            lblWard.Text = "Phường:";
-
-            txtWard.Location = new Point(475, 72);
-            txtWard.Name = "txtWard";
-            txtWard.Size = new Size(200, 23);
+            lblWard.Visible = false;
+            txtWard.Visible = false;
 
             // ==============================
-            // DISTRICT
+            // DISTRICT (Hidden)
             // ==============================
 
-            lblDistrict.AutoSize = true;
-            lblDistrict.Location = new Point(390, 110);
-            lblDistrict.Name = "lblDistrict";
-            lblDistrict.Size = new Size(70, 15);
-            lblDistrict.Text = "Quận/Huyện:";
-
-            txtDistrict.Location = new Point(475, 107);
-            txtDistrict.Name = "txtDistrict";
-            txtDistrict.Size = new Size(200, 23);
+            lblDistrict.Visible = false;
+            txtDistrict.Visible = false;
 
             // ==============================
-            // PROVINCE
+            // PROVINCE (Hidden)
             // ==============================
 
-            lblProvince.AutoSize = true;
-            lblProvince.Location = new Point(390, 145);
-            lblProvince.Name = "lblProvince";
-            lblProvince.Size = new Size(70, 15);
-            lblProvince.Text = "Tỉnh/TP:";
-
-            txtProvince.Location = new Point(475, 142);
-            txtProvince.Name = "txtProvince";
-            txtProvince.Size = new Size(200, 23);
+            lblProvince.Visible = false;
+            txtProvince.Visible = false;
 
             // ==============================
             // REWARD POINTS
             // ==============================
 
             lblRewardPoints.AutoSize = true;
-            lblRewardPoints.Location = new Point(390, 180);
+            lblRewardPoints.Location = new Point(390, 75);
             lblRewardPoints.Name = "lblRewardPoints";
             lblRewardPoints.Size = new Size(75, 15);
             lblRewardPoints.Text = "Điểm tích lũy:";
 
-            txtRewardPoints.Location = new Point(475, 177);
+            txtRewardPoints.Location = new Point(475, 72);
             txtRewardPoints.Name = "txtRewardPoints";
             txtRewardPoints.Size = new Size(200, 23);
             txtRewardPoints.Text = "0";
@@ -217,12 +196,12 @@
             // ==============================
 
             lblMembershipRank.AutoSize = true;
-            lblMembershipRank.Location = new Point(720, 75);
+            lblMembershipRank.Location = new Point(390, 110);
             lblMembershipRank.Name = "lblMembershipRank";
             lblMembershipRank.Size = new Size(75, 15);
             lblMembershipRank.Text = "Hạng thành viên:";
 
-            txtMembershipRank.Location = new Point(815, 72);
+            txtMembershipRank.Location = new Point(475, 107);
             txtMembershipRank.Name = "txtMembershipRank";
             txtMembershipRank.Size = new Size(200, 23);
             txtMembershipRank.Text = "Chuẩn";
@@ -232,12 +211,12 @@
             // ==============================
 
             lblKeyword.AutoSize = true;
-            lblKeyword.Location = new Point(720, 110);
+            lblKeyword.Location = new Point(390, 145);
             lblKeyword.Name = "lblKeyword";
             lblKeyword.Size = new Size(70, 15);
             lblKeyword.Text = "Tìm kiếm:";
 
-            txtKeyword.Location = new Point(815, 107);
+            txtKeyword.Location = new Point(475, 142);
             txtKeyword.Name = "txtKeyword";
             txtKeyword.Size = new Size(200, 23);
 

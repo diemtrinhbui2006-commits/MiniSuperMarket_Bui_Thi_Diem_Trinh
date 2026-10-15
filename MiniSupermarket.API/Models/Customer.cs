@@ -1,20 +1,14 @@
-﻿namespace MiniSupermarket.API.Models
+namespace MiniSupermarket.API.Models
 {
     public class Customer
     {
         public int CustomerId { get; set; }
 
-        public string CustomerName { get; set; }
+        public string CustomerName { get; set; } = string.Empty;
 
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
-        public string Address { get; set; }
-
-        public string Ward { get; set; }
-
-        public string District { get; set; }
-
-        public string Province { get; set; }
+        public string Address { get; set; } = string.Empty;
 
         public int RewardPoints { get; set; } = 0;
 

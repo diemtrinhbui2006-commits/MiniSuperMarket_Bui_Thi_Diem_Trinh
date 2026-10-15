@@ -1,4 +1,4 @@
-﻿namespace MiniSupermarket.WinForms
+namespace MiniSupermarket.WinForms
 {
     partial class FormMainShell
     {
@@ -92,6 +92,7 @@
             btnLogout.Text = "🚪  Đăng xuất";
             btnLogout.TextAlign = ContentAlignment.MiddleLeft;
             btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click;
             // 
             // btnUserManage
             // 
@@ -111,6 +112,7 @@
             btnUserManage.Text = "🛡  Quản trị Tài khoản";
             btnUserManage.TextAlign = ContentAlignment.MiddleLeft;
             btnUserManage.UseVisualStyleBackColor = false;
+            btnUserManage.Click += btnUserManage_Click;
             // 
             // btnReports
             // 
@@ -129,6 +131,7 @@
             btnReports.Text = "📊  Báo cáo Doanh thu";
             btnReports.TextAlign = ContentAlignment.MiddleLeft;
             btnReports.UseVisualStyleBackColor = false;
+            btnReports.Click += btnReports_Click;
             // 
             // btnCustomer
             // 
@@ -147,6 +150,7 @@
             btnCustomer.Text = "👥  Quản lý Khách hàng";
             btnCustomer.TextAlign = ContentAlignment.MiddleLeft;
             btnCustomer.UseVisualStyleBackColor = false;
+            btnCustomer.Click += btnCustomer_Click;
             // 
             // btnProduct
             // 
@@ -165,6 +169,7 @@
             btnProduct.Text = "📦  Quản lý Sản phẩm";
             btnProduct.TextAlign = ContentAlignment.MiddleLeft;
             btnProduct.UseVisualStyleBackColor = false;
+            btnProduct.Click += btnProduct_Click;
             // 
             // btnCategory
             // 
@@ -183,6 +188,7 @@
             btnCategory.Text = "📁  Quản lý Danh mục";
             btnCategory.TextAlign = ContentAlignment.MiddleLeft;
             btnCategory.UseVisualStyleBackColor = false;
+            btnCategory.Click += btnCategory_Click;
             // 
             // btnPOS
             // 
@@ -201,6 +207,7 @@
             btnPOS.Text = "\U0001f6d2  Bán hàng (POS)";
             btnPOS.TextAlign = ContentAlignment.MiddleLeft;
             btnPOS.UseVisualStyleBackColor = false;
+            btnPOS.Click += btnPOS_Click;
             // 
             // lblLogo
             // 
@@ -271,6 +278,7 @@
             Name = "FormMainShell";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Hệ thống Quản lý Bán lẻ & Tồn kho Siêu thị Mini";
+            Load += FormMainShell_Load;
             panelSidebar.ResumeLayout(false);
             panelUserFooter.ResumeLayout(false);
             panelTopHeader.ResumeLayout(false);
