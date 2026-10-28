@@ -16,6 +16,48 @@ namespace MiniSupermarket.API.Controllers
             _context = context;
         }
 
+        // Bài tập 6.1: phân trang khách hàng theo điểm thưởng giảm dần.
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPagedCustomers(
+            [FromQuery] string? keyword = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5,
+            CancellationToken cancellationToken = default)
+        {
+            pageNumber = Math.Max(1, pageNumber);
+            if (pageSize < 1 || pageSize > 50) pageSize = 5;
+
+            var query = _context.Customers.AsNoTracking().AsQueryable();
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                var search = keyword.Trim().ToLower();
+                query = query.Where(c => c.CustomerName.ToLower().Contains(search)
+                    || c.PhoneNumber.Contains(search));
+            }
+
+            var totalItems = await query.CountAsync(cancellationToken);
+            var result = new PagedResult<Customer>
+            {
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = (int)Math.Ceiling((double)totalItems / pageSize)
+            };
+
+            var offset = ((long)pageNumber - 1) * pageSize;
+            if (offset < totalItems)
+            {
+                result.Items = await query
+                    .OrderByDescending(c => c.RewardPoints)
+                    .ThenBy(c => c.CustomerId)
+                    .Skip((int)offset)
+                    .Take(pageSize)
+                    .ToListAsync(cancellationToken);
+            }
+
+            return Ok(result);
+        }
+
         // GET: api/customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()

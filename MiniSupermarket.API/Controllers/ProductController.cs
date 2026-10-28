@@ -6,6 +6,7 @@ using MiniSupermarket.API.Models;
 namespace MiniSupermarket.API.Controllers
 {
     [Route("api/products")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -14,6 +15,68 @@ namespace MiniSupermarket.API.Controllers
         public ProductController(SupermarketDbContext context)
         {
             _context = context;
+        }
+
+        // GET: api/products/paged?keyword=Coca&categoryId=2&pageNumber=1&pageSize=5
+        [HttpGet("paged")]
+        public async Task<IActionResult> GetPagedProducts(
+            [FromQuery] string? keyword = null,
+            [FromQuery] int? categoryId = null,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5,
+            CancellationToken cancellationToken = default)
+        {
+            pageNumber = Math.Max(1, pageNumber);
+            if (pageSize < 1 || pageSize > 50) pageSize = 5;
+
+            var query = _context.Products
+                .Include(p => p.Category)
+                .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                var search = keyword.Trim().ToLower();
+                query = query.Where(p => p.ProductName.ToLower().Contains(search)
+                    || p.Barcode.Contains(search));
+            }
+
+            if (categoryId.HasValue && categoryId.Value > 0)
+            {
+                query = query.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            var totalItems = await query.CountAsync(cancellationToken);
+            var result = new PagedResult<ProductItemDto>
+            {
+                CurrentPage = pageNumber,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = (int)Math.Ceiling((double)totalItems / pageSize)
+            };
+
+            // Tính bằng long để số trang rất lớn không làm tràn số nguyên.
+            var offset = ((long)pageNumber - 1) * pageSize;
+            if (offset < totalItems)
+            {
+                result.Items = await query
+                    .OrderBy(p => p.ProductId)
+                    .Skip((int)offset)
+                    .Take(pageSize)
+                    .Select(p => new ProductItemDto
+                    {
+                        ProductId = p.ProductId,
+                        Barcode = p.Barcode,
+                        ProductName = p.ProductName,
+                        Price = p.Price,
+                        StockQuantity = p.StockQuantity,
+                        CategoryId = p.CategoryId,
+                        CategoryName = p.Category != null ? p.Category.CategoryName : string.Empty
+                    })
+                    .ToListAsync(cancellationToken);
+            }
+
+            return Ok(result);
         }
 
         // =========================================================

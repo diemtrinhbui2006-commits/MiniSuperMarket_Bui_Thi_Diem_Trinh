@@ -40,6 +40,10 @@ namespace MiniSupermarket.WinForms
             lblBarcode = new Label();
             lblId = new Label();
             dgvProducts = new DataGridView();
+            panelPaging = new FlowLayoutPanel();
+            btnPrev = new Button();
+            lblPaging = new Label();
+            btnNext = new Button();
             panelTop.SuspendLayout();
             panelDetail.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudStock).BeginInit();
@@ -321,6 +325,39 @@ namespace MiniSupermarket.WinForms
             dgvProducts.Size = new Size(710, 600);
             dgvProducts.TabIndex = 2;
             dgvProducts.CellClick += dgvProducts_CellClick;
+            //
+            // panelPaging
+            //
+            panelPaging.BackColor = Color.White;
+            panelPaging.Dock = DockStyle.Bottom;
+            panelPaging.Height = 52;
+            panelPaging.Padding = new Padding(12, 8, 12, 8);
+            panelPaging.Controls.Add(btnPrev);
+            panelPaging.Controls.Add(lblPaging);
+            panelPaging.Controls.Add(btnNext);
+            //
+            // btnPrev
+            //
+            btnPrev.Name = "btnPrev";
+            btnPrev.Text = "<< Trang trước";
+            btnPrev.AutoSize = true;
+            btnPrev.Enabled = false;
+            btnPrev.Click += btnPrev_Click;
+            //
+            // lblPaging
+            //
+            lblPaging.Name = "lblPaging";
+            lblPaging.Text = "Chưa tải dữ liệu";
+            lblPaging.AutoSize = true;
+            lblPaging.Padding = new Padding(8, 7, 8, 0);
+            //
+            // btnNext
+            //
+            btnNext.Name = "btnNext";
+            btnNext.Text = "Trang sau >>";
+            btnNext.AutoSize = true;
+            btnNext.Enabled = false;
+            btnNext.Click += btnNext_Click;
             // 
             // FormProductManagement
             // 
@@ -330,6 +367,7 @@ namespace MiniSupermarket.WinForms
             Controls.Add(dgvProducts);
             Controls.Add(panelDetail);
             Controls.Add(panelTop);
+            Controls.Add(panelPaging);
             FormBorderStyle = FormBorderStyle.None;
             Name = "FormProductManagement";
             Text = "Quản lý Sản phẩm";
@@ -369,5 +407,9 @@ namespace MiniSupermarket.WinForms
         private Button btnDelete;
         private Button btnClear;
         private DataGridView dgvProducts;
+        private FlowLayoutPanel panelPaging;
+        private Button btnPrev;
+        private Label lblPaging;
+        private Button btnNext;
     }
 }
