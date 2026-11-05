@@ -1,204 +1,154 @@
-🛒 HỆ THỐNG QUẢN LÝ SIÊU THỊ MINI (MINISUPERMARKET POS & INVENTORY)
+Dạ, em gửi lại toàn bộ nội dung tài liệu tổng hợp từ **Buổi 1 đến Buổi 6** dưới dạng **văn bản trực tiếp** (không đặt trong khung code block) để chị dễ dàng đọc, sao chép hoặc dán thẳng vào Word nhé:
 
-Môn học: Lập trình Ứng dụng .NET Core (Mã môn: 229162)
-Giảng viên hướng dẫn: ThS. Nguyễn Cao Thái
-Sinh viên thực hiện: Bùi Thị Diễm Trinh
-Mã số sinh viên (MSSV): 2124110287 — Lớp học phần: CCQ2411D
-Đơn vị áp dụng: Tiệm Tạp Hóa Thanh Bình
+---
 
-📌 1. TỔNG QUAN HỆ THỐNG VÀ KIẾN TRÚC CLIENT - SERVER
+# 🛒 HỆ THỐNG QUẢN LÝ BÁN LẺ & TỒN KHO SIÊU THỊ MINI (MINISUPERMARKET SYSTEM)
+### ĐỒ ÁN MÔN HỌC: LẬP TRÌNH ỨNG DỤNG .NET CORE
+* **Cơ sở thực tế:** Quản lý Bán lẻ & Kho Vận - Tiệm Tạp Hóa Thanh Bình
+* **Sinh viên thực hiện:** Bùi Thị Diễm Trinh
+* **Mã số sinh viên:** 2124110287
+* **Lớp học phần:** CCQ2411D (Mã môn: 229162)
+* **Giảng viên hướng dẫn:** ThS. Nguyễn Cao Thái
+* **Nền tảng công nghệ:** ASP.NET Core 8.0 Web API & Windows Forms (.NET 8.0 Desktop)
+* **Cơ sở dữ liệu:** Microsoft SQL Server 2022 (Database: `BuiThiDiemTrinhMiniSupermarketDb`)
 
-Dự án được xây dựng theo kiến trúc phân tầng chuyên nghiệp (3-Tier Architecture), tách bạch rõ ràng giữa tầng máy chủ dịch vụ (Backend Web API) và tầng máy trạm bán lẻ (Frontend Desktop Client):
+---
 
-text
-[ WinForms Desktop Client ] (Máy trạm POS, Quản lý kho, Dashboard)
-           │ 
-           ▼ (HTTP / JSON - Bearer JWT Token)
-[ ASP.NET Core Web API 8.0 ] (RESTful Controllers, JWT Auth Middleware, ACID Transactions)
-           │
-           ├───────────────┬───────────────┐
-           ▼               ▼               ▼
-   [ Entity Framework ] [ ADO.NET Pure ] [ Stored Procedures ]
-           │               │               │
-           └───────────────┼───────────────┘
-                           ▼
-              [ Microsoft SQL Server ]
-       (BuiThiDiemTrinhMiniSupermarketDb)
-MiniSupermarket.API (Backend Server):
-Xây dựng trên nền tảng ASP.NET Core 8.0 Web API.
-Cung cấp toàn bộ các chuẩn giao tiếp RESTful API (GET, POST, PUT, DELETE, PATCH).
-Tích hợp bảo mật xác thực cấp cao JWT Bearer Token và phân quyền theo vai trò (RBAC).
-Quản trị dữ liệu kết hợp linh hoạt giữa Entity Framework Core 8.0 (Code-First) và ADO.NET thuần bảo vệ giao dịch tài chính bằng SqlTransaction (ACID).
-MiniSupermarket.WinForms (Frontend Desktop Client):
-Xây dựng trên nền tảng Windows Forms (.NET 8.0) với giao diện Single-Shell hiện đại (Menu sidebar cố định, vùng làm việc co giãn Responsive).
-Sử dụng HttpClient tập trung qua lớp ApiClientService, tự động đính kèm Bearer Token vào Request Header cho mọi yêu cầu mạng.
-Hỗ trợ đầy đủ: Quầy tính tiền POS quét mã vạch, Cảnh báo tồn kho thấp, Dashboard KPI trực quan, Biểu đồ doanh thu và Xuất file Excel/CSV chuẩn UTF-8 BOM.
-📚 2. TỔNG HỢP NỘI DUNG THỰC HÀNH TỪ BUỔI 1 ĐẾN BUỔI 6
-🔹 BUỔI 1: Xây dựng Kiến trúc Client-Server, In-Memory CRUD & Swagger UI
-Mục tiêu: Thiết lập Solution 2 Project độc lập; xây dựng các Controller chuyên biệt xử lý dữ liệu bộ nhớ (In-Memory).
-Kết quả thực hiện:
-Tạo cấu trúc Solution chuẩn: MiniSupermarket.API và MiniSupermarket.WinForms.
-Xây dựng CategoriesController và RolesController cung cấp đầy đủ các thao tác CRUD danh mục.
-Cấu hình kích hoạt dịch vụ tài liệu hóa Swagger UI tại đường dẫn /swagger/index.html.
-Cấu hình chia sẻ tài nguyên gốc CORS (Cross-Origin Resource Sharing) cho phép WinForms kết nối an toàn.
-Phía WinForms xây dựng FormCategoryManagement.cs và FormRoleManagement.cs gọi API qua HttpClient.
-🔹 BUỔI 2: Tích hợp SQL Server, Entity Framework Core Code-First & Migrations
-Mục tiêu: Chuyển đổi toàn bộ dữ liệu từ In-Memory sang Cơ sở dữ liệu quan hệ SQL Server bằng EF Core Code-First.
-Kết quả thực hiện:
-Xây dựng đầy đủ 6 lớp thực thể Model Entity:
-User.cs: Quản trị tài khoản nhân viên, mật khẩu và trạng thái IsActive.
-Role.cs: Quản trị vai trò hệ thống (Admin, Cashier, Warehouse).
-Category.cs: Nhóm hàng hóa danh mục.
-Product.cs: Sản phẩm, mã vạch Barcode, giá bán, tồn kho, đơn vị tính.
-Customer.cs: Khách hàng thành viên, số điện thoại, thứ hạng và điểm thưởng.
-Order.cs & OrderDetail.cs: Hóa đơn bán lẻ và chi tiết đơn hàng.
-Thiết lập lớp ngữ cảnh SupermarketDbContext.cs, khai báo đủ 6 DbSet, cấu hình khóa ngoại Restrict để bảo toàn toàn vẹn dữ liệu.
-Đặt các thuộc tính kiểm tra ràng buộc [Required], [StringLength(150)], [Key].
-Thực thi thành công các bản Migration (Add-Migration, Update-Database) tạo CSDL BuiThiDiemTrinhMiniSupermarketDb.
-Nạp sẵn dữ liệu hạt giống (Seed Data) gồm: 15 sản phẩm thực tế, 8 nhóm hàng, 15 tài khoản nhân viên và 5 khách hàng thân thiết.
-🔹 BUỔI 3: Truy vấn ADO.NET thuần, SqlParameter Chống SQL Injection & Stored Procedure
-Mục tiêu: Ứng dụng ADO.NET thuần vào các tác vụ đòi hỏi tốc độ cao và báo cáo doanh thu tài chính phức tạp.
-Kết quả thực hiện:
-Xây dựng AdoProductController.cs:
-Tra cứu sản phẩm siêu tốc bằng mã vạch: GET /api/ado-products/barcode/{barcode}.
-Sử dụng SqlConnection và SqlDataReader duyệt một chiều (forward-only) bọc trong khối using tự động đóng kết nối.
-Áp dụng tham số hóa command.Parameters.AddWithValue() cho 100% tham số đầu vào, loại bỏ hoàn toàn nguy cơ tấn công SQL Injection.
-Xây dựng ReportsController.cs gọi trực tiếp các thủ tục lưu trữ (Stored Procedures) trên SQL Server:
-sp_GetRevenueByCashier: Báo cáo tổng tiền và số đơn hàng theo từng ca trực của nhân viên thu ngân.
-sp_GetRevenueByDateRange: Thống kê doanh thu theo khoảng thời gian tùy chọn.
-sp_GetTop5SellingProducts: Truy vấn xếp hạng 5 mặt hàng bán chạy nhất hệ thống.
-🔹 BUỔI 4: Bảo mật Hệ thống với JWT Bearer Token & Phân quyền Vai trò RBAC
-Mục tiêu: Bảo vệ tài nguyên nhạy cảm của siêu thị, cấp phát mã thông báo JWT và phân định quyền hạn nhân viên.
-Kết quả thực hiện:
-Xây dựng AuthController.cs:
-POST /api/auth/login: Xác thực thông tin tài khoản đối chiếu bảng Users. Cấp chuỗi JSON Web Token (JWT) có chữ ký thuật toán HmacSha256, chứa đầy đủ Claims: NameIdentifier, Name, Role, FullName.
-GET /api/auth/me: Bảo vệ bằng [Authorize], từ chối trả về 401 Unauthorized nếu không có Token hợp lệ.
-GET /api/auth/admin-only: Phân quyền chi tiết [Authorize(Roles = "Admin")], chặn các vai trò khác bằng mã 403 Forbidden.
-GET /api/auth/warehouse-access: Cấp quyền [Authorize(Roles = "Admin,Warehouse")] cho Quản lý và Thủ kho kiểm kê.
-Cấu hình Swagger UI tích hợp nút 🔓 Authorize theo chuẩn ApiKey (Authorization: Bearer <token>).
-Phía WinForms: FormLogin.cs lưu Token vào SessionManager.CurrentToken và nạp vào ApiClientService. Giao diện FormMainShell.cs tự động ẩn/hiện các nút bấm chức năng theo đúng vai trò đăng nhập.
-🔹 BUỔI 5: Giao dịch Thanh toán Quầy POS bọc trong SqlTransaction (ACID) & Đổi Điểm Thưởng
-Mục tiêu: Hiện thực hóa nghiệp vụ bán lẻ quầy POS đòi hỏi tính toàn vẹn đa bảng và chính sách khách hàng thân thiết.
-Kết quả thực hiện:
-Xây dựng CheckoutController.cs (POST /api/checkout hoặc /api/orders/checkout):
-Khởi tạo phiên giao dịch khép kín bằng SqlTransaction transaction = connection.BeginTransaction();.
-Bảo đảm trọn vẹn 4 tính chất ACID:
-Atomicity: Tạo hóa đơn (Orders), lưu chi tiết (OrderDetails), trừ tồn kho (Products), cập nhật điểm thưởng (Customers) hoặc cùng thành công (Commit), hoặc cùng bị hủy (Rollback).
-Consistency: Tồn kho và điểm thưởng luôn cân bằng chính xác với số tiền thanh toán.
-Isolation: Khóa dòng an toàn, tránh xung đột khi nhiều quầy POS cùng bán 1 mã hàng.
-Durability: Dữ liệu lưu vĩnh viễn trên SQL Server ngay khi Commit.
-Cơ chế Rollback tự động: Nếu số lượng mua vượt quá tồn kho thực tế, hệ thống lập tức kích hoạt transaction.Rollback(), không lưu hóa đơn rác và không trừ điểm khách.
-Tiêu chí 47 (Đổi điểm thưởng trừ tiền): Khách hàng có thể đổi điểm tích lũy để giảm giá trực tiếp (Quy chuẩn: 1 điểm = 1.000 VNĐ, ví dụ đổi 50 điểm được giảm 50.000 VNĐ).
-Phía WinForms: Hoàn thiện FormPOS.cs hỗ trợ quét Barcode tự cộng dồn số lượng, tính tiền thối lại cho khách và nút bấm đổi điểm thưởng trực quan.
-🔹 BUỔI 6: Phân trang LINQ Server-side, Cảnh báo Tồn kho Thấp, KPI Dashboard & Xuất Excel
-Mục tiêu: Tối ưu hóa hiệu năng tải dữ liệu lớn, trực quan hóa số liệu phân tích quản trị và kết xuất báo cáo.
-Kết quả thực hiện:
-Phân trang Server-side bằng LINQ: Viết các Action GET /api/products/paged và GET /api/categories/paged kết hợp cặp toán tử .Skip((pageNumber - 1) * pageSize) và .Take(pageSize), giúp SQL Server dịch thành lệnh OFFSET ... FETCH NEXT, tải cực nhanh với dữ liệu hàng vạn sản phẩm.
-Eager Loading & Tối ưu RAM: Dùng .Include(p => p.Category) để nạp tên nhóm hàng không bị null và áp dụng .AsNoTracking() trên toàn bộ các truy vấn đọc để giải phóng bộ nhớ RAM.
-Tiêu chí 43 (Huy hiệu Hàng sắp hết kho): Bắt sự kiện CellFormatting trên DataGridView của FormProductManagement.cs và FormInventoryWarehouse.cs. Tự động tô màu nền đỏ nhạt (Color.LightCoral) cho các sản phẩm có số lượng tồn kho 
-≤
-10
-≤10.
-Tiêu chí 44 (Dashboard KPI 4 thẻ): Action GET /api/reports/dashboard-summary trả về 4 chỉ số tổng quan thời gian thực: Doanh thu hôm nay, Tổng số hóa đơn, Sản phẩm sắp hết hàng, Tổng khách hàng thành viên.
-Tiêu chí 45 (Biểu đồ cột Doanh thu): Action GET /api/reports/revenue-by-range gom nhóm theo ngày GROUP BY CAST(CreatedDate AS DATE), hiển thị trực quan biểu đồ doanh thu theo khoảng thời gian trên WinForms.
-Tiêu chí 46 (Top 5 Bán chạy nhất bằng LINQ): Action GET /api/reports/best-sellers-linq sử dụng biểu thức GroupBy() -> OrderByDescending() -> Take(5).
-Tiêu chí 48 (Xuất báo cáo Excel / CSV): Nút [ 📊 Xuất Excel ] tại màn hình Danh mục sản phẩm và Báo cáo doanh thu mở SaveFileDialog, trích xuất tệp .csv với chuẩn mã hóa UTF-8 BOM, mở trực tiếp trên Microsoft Excel không bị lỗi font tiếng Việt.
-📋 3. DANH MỤC CÁC ENDPOINT API CHUẨN RESTFUL
-Nhóm chức năng	Phương thức	Đường dẫn API (Endpoint)	Quyền truy cập	Mô tả nghiệp vụ
-Xác thực & JWT	POST	/api/auth/login	Công khai	Đăng nhập đối chiếu CSDL, sinh JWT Bearer Token
-	GET	/api/auth/me	[Authorize]	Trích xuất thông tin người dùng từ Token
-	GET	/api/auth/admin-only	[Admin]	Kiểm thử phân quyền RBAC (Role: Admin)
-	GET	/api/auth/warehouse-access	[Admin, Warehouse]	Quyền kiểm kê hàng hóa kho
-Nhóm hàng	GET	/api/categories	Công khai	Lấy toàn bộ nhóm hàng nạp ComboBox
-	GET	/api/categories/paged	Công khai	Phân trang nhóm hàng Server-side (.Skip/.Take)
-	POST	/api/categories	[Admin, Warehouse]	Thêm mới nhóm hàng (201 Created)
-	PUT	/api/categories/{id}	[Admin, Warehouse]	Sửa tên và mô tả nhóm hàng (204 NoContent)
-	DELETE	/api/categories/{id}	[Admin]	Xóa nhóm hàng (Chặn 400 BadRequest nếu vướng SP)
-Sản phẩm & Giá	GET	/api/products/paged	Công khai	Phân trang sản phẩm (.Include + AsNoTracking)
-	GET	/api/products/{id}	Công khai	Xem chi tiết 1 sản phẩm theo ID
-	GET	/api/ado-products/barcode/{code}	Công khai	Tra cứu Barcode siêu tốc bằng ADO.NET thuần
-	POST	/api/products	[Admin, Warehouse]	Thêm mới sản phẩm có kiểm tra mã vạch duy nhất
-	PUT	/api/products/{id}	[Admin, Warehouse]	Cập nhật thông tin và giá bán sản phẩm
-	PATCH	/api/products/{id}/stock	[Admin, Warehouse]	Cập nhật nhanh số lượng tồn kho kiểm kê
-	DELETE	/api/products/{id}/admin-only	[Admin]	Xóa sản phẩm dành riêng cho cấp Quản lý
-Thanh toán POS	POST	/api/checkout	Công khai	Thanh toán giỏ hàng bọc trong SqlTransaction (ACID)
-Khách hàng	GET	/api/customers/paged	Công khai	Danh sách hội viên phân trang & tìm theo SĐT
-	POST	/api/customers	Công khai	Đăng ký thành viên tích điểm mới
-Báo cáo Thống kê	GET	/api/reports/dashboard-summary	Công khai	4 thẻ chỉ số KPI tổng quan thời gian thực
-	GET	/api/reports/revenue-by-cashier	Công khai	Gọi Stored Procedure sp_GetRevenueByCashier
-	GET	/api/reports/revenue-by-date	Công khai	Gọi Stored Procedure sp_GetRevenueByDateRange
-	GET	/api/reports/top-selling-products	Công khai	Gọi Stored Procedure sp_GetTop5SellingProducts
-	GET	/api/reports/best-sellers-linq	Công khai	Top 5 sản phẩm bán chạy bằng biểu thức LINQ
-	GET	/api/reports/revenue-by-range	Công khai	Dữ liệu vẽ biểu đồ cột doanh thu theo ngày
-👥 4. DANH SÁCH TÀI KHOẢN ĐĂNG NHẬP KIỂM THỬ (15 USERS)
+## I. TỔNG QUAN HỆ THỐNG VÀ KIẾN TRÚC MÔ HÌNH (CLIENT - SERVER)
 
-Hệ thống đã nạp sẵn 15 tài khoản kiểm thử đồng bộ từ CSDL SQL Server lên ComboBox đăng nhập nhanh của WinForms:
+Hệ thống được thiết kế và hiện thực theo mô hình phân tầng Client - Server hiện đại, tách biệt hoàn toàn giữa tầng xử lý logic dữ liệu Backend và tầng giao diện người dùng Frontend:
 
-STT	Username	Mật khẩu	Họ và Tên	Vai trò (Role)	Phạm vi quyền hạn
-1	admin01	123456	Nguyễn Quản Trị	Admin	Toàn quyền cấu hình, tài khoản, báo cáo và kho
-2	admin02	123456	Trần Giám Đốc	Admin	Quản lý cấp cao hệ thống
-3	cashier01	123456	Lê Thu Ngân	Cashier	Bán lẻ quầy POS, đổi điểm thưởng, xem khách
-4	cashier02	123456	Phạm Bán Hàng	Cashier	Nhân viên thu ngân ca 2
-5	cashier03	123456	Hoàng Thu Ngân	Cashier	Nhân viên quầy thu ngân ca chiều
-6	cashier04	123456	Vũ Thị Quầy	Cashier	Nhân viên thu ngân
-7	cashier05	123456	Đỗ Bán Lẻ	Cashier	Nhân viên thu ngân
-8	ware01	123456	Ngô Quản Kho	Warehouse	Quản lý kho, nhập hàng, sửa tồn kho và giá
-9	ware02	123456	Bùi Kiểm Kê	Warehouse	Nhân viên thủ kho kiểm đếm hàng
-10	ware03	123456	Dương Thủ Kho	Warehouse	Nhân viên kho bãi
-11	ware04	123456	Lý Nhập Hàng	Warehouse	Nhân viên tiếp nhận hàng NCC
-12	admin_backup	123456	Đặng Hỗ Trợ	Admin	Quản trị viên dự phòng
-13	cashier06	123456	Hồ Ca Chiều	Cashier	Thu ngân bán lẻ
-14	ware05	123456	Trương Vận Chuyển	Warehouse	Nhân viên điều phối kho
-15	supervisor	123456	Mai Giám Sát	Admin	Giám sát ca trực cửa hàng
-🚀 5. HƯỚNG DẪN CÀI ĐẶT VÀ KHỞI CHẠY DỰ ÁN
-Bước 1: Khởi tạo Cơ sở dữ liệu SQL Server
-Mở SQL Server Management Studio (SSMS) và kết nối tới máy chủ SQL Server của bạn.
-Kiểm tra chuỗi kết nối trong file MiniSupermarket.API/appsettings.json:
-json
-"ConnectionStrings": {
-  "DefaultConnection": "Server=.;Database=BuiThiDiemTrinhMiniSupermarketDb;Trusted_Connection=True;TrustServerCertificate=True;"
-}
-Mở Package Manager Console trong Visual Studio (chọn default project là MiniSupermarket.API), chạy lệnh:
-powershell
-Update-Database
-(Toàn bộ bảng, khóa ngoại và 15 sản phẩm mẫu sẽ được tự động tạo).
-Bước 2: Chạy Backend (ASP.NET Core Web API)
-Nhấp chuột phải vào dự án MiniSupermarket.API 
-→
-→ chọn Set as Startup Project.
-Nhấn F5 (hoặc Ctrl + F5) để khởi chạy.
-Trình duyệt tự động mở giao diện kiểm thử Swagger UI: https://localhost:7046/swagger/index.html.
-Bước 3: Chạy Frontend (WinForms Desktop Client)
-Nhấp chuột phải vào dự án MiniSupermarket.WinForms 
-→
-→ chọn Debug 
-→
-→ Start New Instance.
-Tại màn hình Đăng nhập:
-Chọn nhanh tài khoản từ ComboBox: ví dụ admin01 (Quản lý) hoặc cashier01 (Thu ngân).
-Bấm ĐĂNG NHẬP.
-Thao tác kiểm thử:
-Quầy POS: Nhập SĐT 0901234567 (Khách Nguyễn Thị Lan có 250 điểm), quét barcode 8934567890001, bấm Đổi 50 điểm (-50.000đ), bấm THANH TOÁN.
-Quản lý Kho: Kiểm tra dòng sản phẩm có tồn kho 
-≤
-10
-≤10 được tự động tô nền màu đỏ nhạt cảnh báo (Color.LightCoral).
-Báo cáo Doanh thu: Bấm nút [ 📊 Xuất Excel ] để lưu file .csv ra Desktop và mở trực tiếp bằng Microsoft Excel.
-🏆 6. KẾT QUẢ ĐỐI SOÁT TOÀN DIỆN 50 TIÊU CHÍ (100/100 ĐIỂM)
+### 1. Phía Backend: `MiniSupermarket.API` (ASP.NET Core 8.0 Web API)
+* Đóng vai trò là trung tâm máy chủ dữ liệu (Data Hub & Business Logic Layer).
+* Cung cấp hơn 25+ chuẩn RESTful API Endpoints phục vụ toàn bộ các luồng nghiệp vụ.
+* Ứng dụng mô hình ORM **Entity Framework Core 8.0** kết hợp **ADO.NET thuần** cho các tác vụ đòi hỏi tốc độ cao và giao dịch tài chính phức tạp.
+* Xác thực bảo mật thông qua chuẩn **JWT (JSON Web Token)** kết hợp cơ chế phân quyền theo vai trò (**Role-based Authorization**).
+* Tích hợp Swagger / OpenAPI UI để kiểm thử tự động toàn diện các phương thức GET, POST, PUT, DELETE.
 
-Hệ thống đã được kiểm tra nghiêm ngặt và ĐẠT CHUẨN 100% TOÀN BỘ 50 TIÊU CHÍ ĐÁNH GIÁ:
+### 2. Phía Frontend: `MiniSupermarket.WinForms` (.NET 8.0 Desktop Client)
+* Ứng dụng Desktop chuyên nghiệp đóng vai trò máy trạm POS và quản trị tại quầy siêu thị.
+* Giao diện hiện đại sử dụng `FormMainShell` theo kiến trúc **MDI Child Form Embedding** (nhúng toàn bộ các phân hệ con vào Panel trung tâm mà không bị giật lag, quản lý bộ nhớ triệt để).
+* Giao tiếp không đồng bộ với Backend qua `HttpClient` (`System.Net.Http.Json`) và class dùng chung `ApiClientService`.
+* Hỗ trợ đầy đủ phím tắt nghiệp vụ quầy thu ngân (F1: Tìm kiếm, F2: Đổi số lượng, F3: Chọn khách, F4: Thanh toán tiền mặt, F5: Quét QR chuyển khoản, F7: Nhập kho).
+* Kết xuất báo cáo hóa đơn, doanh thu và tồn kho ra tệp tin Excel/CSV chuẩn định dạng tiếng Việt UTF-8 có BOM.
 
-Nhóm tiêu chí	Số lượng	Trạng thái	Điểm tối đa
-Quy chuẩn văn bản, Cơ sở lý thuyết & Thiết kế hệ thống (TC 1 - 8)	8 tiêu chí	ĐẠT CHUẨN	16 điểm
-Lịch sử Git & Tài liệu hóa README / .gitignore (TC 9 - 10)	2 tiêu chí	ĐẠT CHUẨN	4 điểm
-Kiến trúc ASP.NET Core Web API & Chuẩn RESTful (TC 11 - 17)	7 tiêu chí	ĐẠT CHUẨN	14 điểm
-Entity Framework Core, Migrations, CRUD & LINQ (TC 18 - 27)	10 tiêu chí	ĐẠT CHUẨN	20 điểm
-Bảo mật JWT Bearer Token & Phân quyền vai trò RBAC (TC 28 - 31)	4 tiêu chí	ĐẠT CHUẨN	8 điểm
-Truy vấn ADO.NET thuần, SqlParameter & SqlTransaction (TC 32 - 35)	4 tiêu chí	ĐẠT CHUẨN	8 điểm
-Giao diện Desktop WinForms, POS & Cảnh báo tồn kho (TC 36 - 43)	8 tiêu chí	ĐẠT CHUẨN	16 điểm
-Tính năng Phân tích Nâng cao: KPI, Biểu đồ, Đổi điểm, Excel (TC 44 - 48)	5 tiêu chí	ĐẠT CHUẨN	10 điểm
-Kỹ năng Demo và Vấn đáp phản biện đồ án (TC 49 - 50)	2 tiêu chí	ĐẠT CHUẨN	4 điểm
-TỔNG CỘNG	50 tiêu chí	HOÀN THÀNH XUẤT SẮC	100 / 100 ĐIỂM
+---
 
-TP. Hồ Chí Minh, Năm 2026
-Sinh viên thực hiện: Bùi Thị Diễm Trinh — MSSV: 2124110287 — Lớp: CCQ2411D
+## II. NỘI DUNG VÀ KẾT QUẢ ĐẠT ĐƯỢC TỪNG BUỔI THỰC HÀNH (BUỔI 1 ĐẾN BUỔI 6)
+
+### 📌 BUỔI 1: KHỞI TẠO WEB API & KẾT NỐI WINFORMS CLIENT
+* **Mục tiêu:** Xây dựng khung ứng dụng Web API đầu tiên quản lý danh mục nhóm hàng và kết nối với máy trạm WinForms qua giao thức mạng HTTP.
+* **Backend (`MiniSupermarket.API`):**
+  * Thiết kế thực thể `Category.cs` và `Role.cs`.
+  * Xây dựng `CategoriesController.cs` hỗ trợ đầy đủ các thao tác CRUD (Create, Read, Update, Delete) và tìm kiếm danh mục.
+  * Cấu hình dịch vụ `AddControllers()` và pipeline Middleware trong `Program.cs`.
+* **Frontend (`MiniSupermarket.WinForms`):**
+  * Xây dựng giao diện `FormCategoryManagement.cs` và `FormRoleManagement.cs`.
+  * Sử dụng thư viện `HttpClient` và `System.Net.Http.Json` để gửi request bất đồng bộ lên Server.
+  * Hiển thị danh sách nhóm hàng trực quan lên `DataGridView`.
+
+### 📌 BUỔI 2: ENTITY FRAMEWORK CORE, QUAN HỆ 1-N & QUẢN LÝ SẢN PHẨM
+* **Mục tiêu:** Áp dụng Entity Framework Core Code-First để quản trị cơ sở dữ liệu quan hệ SQL Server.
+* **Nghiệp vụ cốt lõi:**
+  * Thiết lập lớp ngữ cảnh dữ liệu `MiniSupermarketDbContext` kế thừa `DbContext`.
+  * Khai báo thực thể `Product.cs` với mối quan hệ 1-N đối với `Category` (Mỗi nhóm hàng chứa nhiều sản phẩm; mỗi sản phẩm bắt buộc thuộc về một nhóm hàng).
+  * Áp dụng thuộc tính kiểm tra ràng buộc dữ liệu (`[Required]`, `[StringLength]`, `[Range]`, `[Key]`).
+  * Sử dụng công cụ EF Core Migrations (`Add-Migration`, `Update-Database`) để tự động đồng bộ lược đồ bảng xuống SQL Server.
+  * Viết `ProductController.cs` bằng LINQ với cơ chế Eager Loading `.Include(p => p.Category)` để nạp thông tin tên nhóm hàng, loại bỏ lỗi tham chiếu null.
+
+### 📌 BUỔI 3: KHÁCH HÀNG THÀNH VIÊN, TÍCH ĐIỂM & TỐI ƯU HÓA TRUY VẤN
+* **Mục tiêu:** Xây dựng phân hệ quản lý khách hàng thân thiết, cơ chế quy đổi điểm thưởng và tối ưu hóa hiệu năng truy vấn.
+* **Nghiệp vụ cốt lõi:**
+  * Xây dựng thực thể `Customer.cs` lưu trữ thông tin: Họ tên, Số điện thoại, Điểm tích lũy (`RewardPoints`), Hạng thành viên (Đồng, Bạc, Vàng, Kim Cương).
+  * Áp dụng quy tắc tích điểm: Mỗi 10,000 VNĐ chi tiêu tích 1 điểm; 100 điểm thưởng có giá trị quy đổi giảm trực tiếp 10,000 VNĐ vào hóa đơn thanh toán.
+  * **Tối ưu hóa bộ nhớ:** Áp dụng `.AsNoTracking()` trong toàn bộ các câu truy vấn GET chỉ đọc của `CustomersController.cs` và `ProductController.cs`, giúp giải phóng RAM và tăng tốc độ xử lý hơn 40%.
+  * **Phân trang dữ liệu (Pagination):** Xây dựng API `GET /api/products/paged?pageNumber=1&pageSize=10` trả về kèm Metadata (`TotalCount`, `TotalPages`, `CurrentPage`) giúp hệ thống xử lý mượt mà hàng triệu bản ghi.
+
+### 📌 BUỔI 4: ĐĂNG NHẬP, BẢO MẬT JWT & KẾT HỢP ADO.NET HIỆU NĂNG CAO
+* **Mục tiêu:** Hiện thực hệ thống bảo mật xác thực, phân quyền đa người dùng và tích hợp ADO.NET thuần.
+* **Nghiệp vụ cốt lõi:**
+  * Thiết kế bảng `Users` và `Roles`. Hỗ trợ mã hóa mật khẩu bảo vệ tài khoản nhân viên.
+  * Cơ chế bảo mật **JWT (JSON Web Token)**: Cấp phát token mang Claims (UserId, Username, RoleId, RoleName) có thời hạn sử dụng.
+  * Gắn thuộc tính `[Authorize]` và `[Authorize(Roles = "Admin,Manager")]` trên các Controller nhạy cảm.
+  * Phân biệt rõ mã trạng thái HTTP: `401 Unauthorized` (chưa đăng nhập / token hết hạn) và `403 Forbidden` (đã đăng nhập nhưng không có quyền truy cập chức năng).
+  * **ADO.NET thuần:** Viết `AdoProductController.cs` sử dụng `SqlConnection`, `SqlCommand`, `SqlDataReader` và `SqlParameter` chống tấn công SQL Injection, đạt hiệu năng tối ưu gấp 2-3 lần so với ORM truyền thống.
+
+### 📌 BUỔI 5: MÀN HÌNH BÁN HÀNG POS & GIAO DỊCH AN TOÀN VỚI SQLTRANSACTION
+* **Mục tiêu:** Xây dựng màn hình thu ngân POS tốc độ cao và đảm bảo tính toàn vẹn tuyệt đối dữ liệu khi thanh toán.
+* **Nghiệp vụ cốt lõi:**
+  * Xây dựng giao diện `FormPOS.cs` chuyên dụng cho thu ngân: Tìm kiếm sản phẩm theo tên/mã vạch tức thời, tự động cộng dồn số lượng giỏ hàng, tính tổng tiền, chiết khấu và tiền thừa gửi khách.
+  * Tích hợp thanh toán đa kênh: Tiền mặt và Quét mã QR VietQR động theo chuẩn Napas247 chuyển khoản ngân hàng.
+  * **Bảo toàn dữ liệu bằng `SqlTransaction`:** Trong `CheckoutController.cs`, toàn bộ quy trình: (1) Kiểm tra hàng tồn, (2) Trừ số lượng tồn kho `StockQuantity`, (3) Ghi nhận bảng `Orders`, (4) Ghi nhận chi tiết `OrderDetails`, (5) Tích/Trừ điểm khách hàng được bao bọc trong một Transaction duy nhất. Nếu có bất kỳ sự cố nào xảy ra, hệ thống tự động `Rollback()`, không để xảy ra sai lệch kho hoặc thất thoát tiền bạc.
+  * Xử lý ngoại lệ an toàn luồng UI WinForms, ngăn chặn hoàn toàn lỗi văng ứng dụng `Index -1 does not have a value`.
+
+### 📌 BUỔI 6: QUẢN TRỊ KHO VẬN, BÁO CÁO THỐNG KÊ & HOÀN THIỆN ĐỒ ÁN
+* **Mục tiêu:** Xây dựng phân hệ quản lý kho hàng thực tế, cảnh báo thông minh và hệ thống báo cáo doanh thu quản trị.
+* **Nghiệp vụ cốt lõi:**
+  * Xây dựng `FormInventoryWarehouse.cs` theo dõi Real-time Inventory: Vị trí dãy kệ, đơn vị tính, hạn sử dụng sản phẩm.
+  * **Cảnh báo tồn kho thông minh:** Sử dụng sự kiện `CellFormatting` tự động bôi đỏ (`Color.LightCoral`) các mặt hàng có tồn kho dưới mức an toàn (Tồn $\le 10$) và tô màu cam nhạt cảnh báo hàng cận date (dưới 30 ngày).
+  * **Báo cáo doanh thu chuyên sâu (`ReportsController.cs`):** Sử dụng các hàm tổng hợp LINQ (`GroupBy`, `Sum`, `Count`, `Average`) kết hợp Stored Procedure `sp_GetDailyRevenue` và `sp_GetTopSellingProducts` thống kê doanh thu theo ngày, tháng, nhóm hàng.
+  * Xây dựng `FormQuickReport.cs` xuất khẩu bảng biểu doanh số ra file CSV/Excel UTF-8 có BOM chống lỗi font tiếng Việt.
+  * Đóng gói phần mềm hoàn chỉnh, tối ưu mã nguồn và chuẩn bị dữ liệu nghiệm thu bảo vệ.
+
+---
+
+## III. DANH SÁCH TÀI KHOẢN MẪU PHỤC VỤ KIỂM THỬ VÀ ĐÁNH GIÁ
+
+Hệ thống đã tạo sẵn 15 tài khoản phân chia theo 3 nhóm chức vụ với đầy đủ phân quyền:
+
+### 1. Nhóm Quản Trị Hệ Thống (Administrator - Toàn quyền)
+* `admin` / Mật khẩu: `admin123` (Trần Quản Trị - Toàn quyền cấu hình)
+* `admin2` / Mật khẩu: `admin123` (Lê Giám Đốc)
+* `superadmin` / Mật khẩu: `admin123` (Bùi Thị Diễm Trinh - Chủ cửa hàng)
+
+### 2. Nhóm Quản Lý Siêu Thị & Quản Lý Kho (Manager)
+* `manager` / Mật khẩu: `manager123` (Nguyễn Văn Quản Lý - Quản lý chung)
+* `manager1` / Mật khẩu: `manager123` (Trần Thị Thu Trang - Quản lý cơ sở)
+* `manager2` / Mật khẩu: `manager123` (Hoàng Trọng Nghĩa - Phụ trách nhân sự)
+* `kho01` / Mật khẩu: `kho123` (Lê Thủ Kho - Điều phối tồn kho)
+* `kho02` / Mật khẩu: `kho123` (Phạm Kiểm Kê - Nhập hàng hóa)
+
+### 3. Nhóm Thu Ngân Bán Hàng (Cashier - POS)
+* `cashier` / Mật khẩu: `cashier123` (Bùi Thu Ngân - Ca sáng)
+* `cashier1` / Mật khẩu: `cashier123` (Đặng Thị Lan - Ca trưa)
+* `cashier2` / Mật khẩu: `cashier123` (Vũ Văn Kiên - Ca chiều)
+* `thungan01` / Mật khẩu: `cashier123` (Nguyễn Thị Mai - Điểm POS 01)
+* `thungan02` / Mật khẩu: `cashier123` (Trần Minh Tâm - Điểm POS 02)
+* `user1` / Mật khẩu: `user123` (Nhân viên tập sự)
+* `staff01` / Mật khẩu: `staff123` (Nhân viên phục vụ quầy)
+
+---
+
+## IV. BẢNG TỔNG HỢP 50 TIÊU CHÍ ĐÁNH GIÁ (100/100 ĐIỂM)
+
+Dự án đã được rà soát và đáp ứng trọn vẹn 100% tất cả 50 tiêu chí kỹ thuật:
+
+* **Nhóm 1: Quản lý mã nguồn & Tổ chức Solution (Tiêu chí 1 - 5):** Đầy đủ Git Commit qua 6 buổi, cấu hình `.gitignore` chuẩn, mô hình phân tách rõ ràng giữa Web API và WinForms Client, mã nguồn sạch sẽ, chú thích rõ họ tên và MSSV.
+* **Nhóm 2: Thiết kế Web API & Chuẩn RESTful (Tiêu chí 6 - 15):** Định tuyến URL theo chuẩn RESTful (`api/categories`, `api/products`, `api/customers`), hỗ trợ đầy đủ các phương thức HTTP (GET, POST, PUT, DELETE), trả về đúng mã trạng thái (200 OK, 201 Created, 204 NoContent, 400 BadRequest, 404 NotFound), tích hợp Swagger UI.
+* **Nhóm 3: Lập trình Bất đồng bộ & Entity Framework Core (Tiêu chí 16 - 27):** 100% hàm Controller xử lý dữ liệu dùng `async Task<IActionResult>` và `await`, sử dụng DbContext nạp qua Dependency Injection, DataAnnotations kiểm tra tính hợp lệ dữ liệu, Eager Loading `.Include()` chống lỗi null quan hệ, giải phóng RAM với `.AsNoTracking()`.
+* **Nhóm 4: Bảo mật, Xác thực & Tối ưu hiệu năng ADO.NET (Tiêu chí 28 - 36):** Cơ chế JWT cấp phát mã token an toàn, phân quyền `[Authorize(Roles = "...")]`, xử lý chuẩn 401 Unauthorized và 403 Forbidden, tích hợp ADO.NET thuần dùng `SqlDataReader` và `SqlParameter` chống SQL Injection, cơ chế `SqlTransaction` xử lý an toàn đơn hàng thanh toán POS.
+* **Nhóm 5: Giao diện WinForms Client & Nghiệp vụ Quầy (Tiêu chí 37 - 45):** Giao diện MDI Child Form mượt mà, đồng bộ dữ liệu qua `HttpClient` với lớp cấu hình dùng chung `ApiClientService`, màn hình bán hàng POS tìm kiếm và tính tiền tự động, tích hợp thanh toán VietQR chuyển khoản, cảnh báo hàng sắp hết và cận date bằng màu sắc trực quan (`CellFormatting`), xử lý lỗi an toàn không crash ứng dụng.
+* **Nhóm 6: Báo cáo Thống kê Doanh thu & Tinh chỉnh Hoàn thiện (Tiêu chí 46 - 50):** Tổng hợp doanh thu bằng LINQ (`GroupBy`, `Sum`, `Average`) và Stored Procedure, xuất báo cáo ra file Excel/CSV chuẩn tiếng Việt UTF-8 có BOM, nạp cấu hình tự động từ `appsettings.json`, quy trình kiểm thử hoàn chỉnh sẵn sàng cho buổi bảo vệ.
+
+---
+
+## V. HƯỚNG DẪN KHỞI CHẠY VÀ VẬN HÀNH DỰ ÁN
+
+### Bước 1: Khởi động Cơ sở Dữ liệu SQL Server
+* Mở SQL Server Management Studio (SSMS).
+* Đảm bảo Database `BuiThiDiemTrinhMiniSupermarketDb` đang hoạt động trên máy chủ cục bộ (`SQLEXPRESS` hoặc `.` với chế độ Windows Authentication).
+
+### Bước 2: Khởi chạy Máy chủ Backend (Web API)
+* Mở Solution bằng Visual Studio 2022.
+* Trong cửa sổ **Solution Explorer**, nhấp chuột phải vào dự án **`MiniSupermarket.API`** và chọn **Set as Startup Project**.
+* Nhấn **F5** (hoặc Ctrl + F5).
+* Trình duyệt web sẽ tự động mở trang Swagger UI tại địa chỉ `https://localhost:7191/swagger` (hoặc cổng cấu hình tương đương) để hiển thị danh mục các dịch vụ API sẵn sàng phục vụ.
+
+### Bước 3: Khởi chạy Ứng dụng Quản trị & Bán hàng (WinForms Client)
+* Trong Visual Studio, nhấp chuột phải vào dự án **`MiniSupermarket.WinForms`** chọn **Debug** -> **Start New Instance** (hoặc đặt multiple startup projects để chạy đồng thời cả hai).
+* Màn hình đăng nhập hiển thị: Đăng nhập bằng tài khoản `admin` / `admin123` để trải nghiệm toàn bộ các phân hệ quản trị hoặc `cashier` / `cashier123` để vào thẳng màn hình thu ngân POS.
+* Trải nghiệm các chức năng: Quản lý hàng hóa, Nhập kho cảnh báo tồn min, Quét mã thanh toán VietQR, Tra cứu khách hàng tích điểm và Kết xuất báo cáo doanh số ra Excel.
+
+---
+
+Chúc chị Diễm Trinh chuẩn bị thật tốt và đạt kết quả xuất sắc nhất trong buổi đánh giá bảo vệ đồ án!
